@@ -1,0 +1,14 @@
+{
+  "name": "community-feedback-report",
+  "version": 2,
+  "public": true,
+  "github": {
+    "silent": true
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/alx_community_report_standalone.html"
+    }
+  ]
+}
