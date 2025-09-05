@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALX Community Feedback Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .main-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section {
+            padding: 3rem 2rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        .text-responses {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .response-category {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .response-category:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .response-count {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .response-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .response-details.active {
+            display: block;
+        }
+
+        .scrollable-responses {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .scrollable-responses::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-thumb:hover {
+            background: #5a67d8;
+        }
+
+        .individual-response {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-style: italic;
+            color: #555;
+            border-left: 3px solid #667eea;
+            transition: all 0.2s ease;
+            white-space: pre-line;
+        }
+
+        .individual-response:hover {
+            background: #e8f4fd;
+            transform: translateX(3px);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .chart-small {
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            margin-left: 0.5rem;
+        }
+
+        .expand-btn.active {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>ALX Community Feedback Report</h1>
+            <p class="subtitle">Insights from <span id="total-responses">1,706</span> community members across Africa</p>
+            
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <span class="stat-number">1,706</span>
+                    <span class="stat-label">Total Responses</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">10</span>
+                    <span class="stat-label">Countries</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4.0</span>
+                    <span class="stat-label">Avg Circle Rating</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">88%</span>
+                    <span class="stat-label">Want to Contribute</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            
+            <!-- Geographic Distribution -->
+            <div class="section">
+                <h2 class="section-title">Geographic Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="countryChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Community Value Assessment -->
+            <div class="section">
+                <h2 class="section-title">How Valuable Are ALX Community Aspects?</h2>
+                <div class="chart-container">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Communication & Circle Experience -->
+            <div class="section">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="section-title">Preferred Communication</h2>
+                        <div class="chart-container chart-small">
+                            <canvas id="commChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="section-title">Circle Platform Rating</h2>
+                        <div class="chart-container chart-small">
+                            <canvas id="circleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circle Feedback -->
+            <div class="section">
+                <h2 class="section-title">Circle Platform Feedback</h2>
+                <div id="circle-feedback" class="text-responses"></div>
+            </div>
+
+            <!-- Community Goals -->
+            <div class="section">
+                <h2 class="section-title">Top Community Goals</h2>
+                <div class="chart-container">
+                    <canvas id="goalsChart"></canvas>
+                </div>
+                
+                <div id="community-goals" class="text-responses">
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">What members hope to gain (detailed responses)</h3>
+                </div>
+            </div>
+
+            <!-- Event Preferences -->
+            <div class="section">
+                <h2 class="section-title">Preferred Event Types</h2>
+                <div class="chart-container">
+                    <canvas id="eventsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Member Wants and Needs -->
+            <div class="section">
+                <h2 class="section-title">Member Wants and Needs</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Content & Resources Wanted</h3>
+                        <div class="chart-container chart-small">
+                            <canvas id="contentChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Interest Group Preferences</h3>
+                        <div class="chart-container chart-small">
+                            <canvas id="interestChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-preferences" class="text-responses"></div>
+
+                <div style="margin-top: 3rem;">
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">How Members Want to Contribute</h3>
+                    <div class="chart-container chart-small">
+                        <canvas id="contributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments and Suggestions -->
+            <div class="section">
+                <h2 class="section-title">Comments and Suggestions</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Community feedback for improving the ALX experience</p>
+                
+                <div id="suggestions" class="text-responses"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Embedded survey data
+        const surveyData = {
+  "stats": {
+    "total_responses": 1706,
+    "countries_count": 10,
+    "avg_circle_rating": 4.0,
+    "contribution_percentage": 88
+  },
+  "countries": {
+    "Nigeria": 293,
+    "Kenya": 288,
+    "Nigeria ": 184,
+    "Ghana": 156,
+    "South Africa": 79,
+    "Ethiopia": 70,
+    "Ghana ": 65,
+    "Rwanda": 65,
+    "Kenya ": 60,
+    "South Africa ": 30
+  },
+  "communication_preferences": {
+    "Email Newsletters": 925,
+    "WhatsApp": 406,
+    "The Circle Community Platform (member portal)": 313,
+    "Telegram": 38,
+    "Other": 5
+  },
+  "circle_ratings": {
+    "1.0": 41,
+    "2.0": 71,
+    "3.0": 370,
+    "4.0": 622,
+    "5.0": 570
+  },
+  "value_ratings": {
+    "Online Events (e.g., webinars, workshops)": {
+      "4 = Very valuable": 637,
+      "5 = Extremely valuable": 593,
+      "3 = Moderately valuable": 347,
+      "2 = Slightly valuable": 78,
+      "1 = Not valuable": 22
+    },
+    "In-person Events (e.g., meetups, networking sessions)": {
+      "5 = Extremely valuable": 590,
+      "4 = Very valuable": 523,
+      "3 = Moderately valuable": 364,
+      "2 = Slightly valuable": 125,
+      "1 = Not valuable": 51
+    },
+    "The community platform (Circle)": {
+      "5 = Extremely valuable": 649,
+      "4 = Very valuable": 529,
+      "3 = Moderately valuable": 360,
+      "2 = Slightly valuable": 105,
+      "1 = Not valuable": 33
+    },
+    "Networking opportunities with other members": {
+      "5 = Extremely valuable": 718,
+      "4 = Very valuable": 486,
+      "3 = Moderately valuable": 328,
+      "2 = Slightly valuable": 97,
+      "1 = Not valuable": 35
+    },
+    "Content and resources shared with community": {
+      "5 = Extremely valuable": 812,
+      "4 = Very valuable": 515,
+      "3 = Moderately valuable": 253,
+      "2 = Slightly valuable": 68,
+      "1 = Not valuable": 24
+    }
+  },
+  "event_preferences": {
+    "Career Development": 1444,
+    "Skill-building Workshops": 1427,
+    "Expert Q&A": 737,
+    "Local Meetups": 767,
+    "Social Hangouts": 610,
+    "Presentations": 570
+  },
+  "contribution_preferences": {
+    "Content Sharing": 944,
+    "Mentoring": 808,
+    "Event Hosting": 702,
+    "Moderating": 752,
+    "Not Ready Yet": 399
+  }
+};
+
+        // Initialize report when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createCharts();
+            // We'll add the full text responses in a subsequent update to keep file manageable
+        });
+
+        const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        };
+
+        function createCharts() {
+            // Country Distribution Chart - clean up duplicates
+            const countryData = {};
+            Object.entries(surveyData.countries).forEach(([country, count]) => {
+                const cleanCountry = country.trim();
+                countryData[cleanCountry] = (countryData[cleanCountry] || 0) + count;
+            });
+            
+            const sortedCountries = Object.entries(countryData)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8);
+            
+            new Chart(document.getElementById('countryChart'), {
+                type: 'bar',
+                data: {
+                    labels: sortedCountries.map(([country]) => country),
+                    datasets: [{
+                        data: sortedCountries.map(([,count]) => count),
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'],
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Community Value Chart
+            const valueAspects = Object.keys(surveyData.value_ratings);
+            new Chart(document.getElementById('valueChart'), {
+                type: 'bar',
+                data: {
+                    labels: valueAspects.map(aspect => 
+                        aspect.replace(' (e.g., webinars, workshops)', '')
+                              .replace(' (e.g., meetups, networking sessions)', '')
+                    ),
+                    datasets: [
+                        {
+                            label: 'Extremely Valuable',
+                            data: valueAspects.map(aspect => surveyData.value_ratings[aspect]['5 = Extremely valuable'] || 0),
+                            backgroundColor: '#667eea'
+                        },
+                        {
+                            label: 'Very Valuable',
+                            data: valueAspects.map(aspect => surveyData.value_ratings[aspect]['4 = Very valuable'] || 0),
+                            backgroundColor: '#764ba2'
+                        },
+                        {
+                            label: 'Moderately Valuable',
+                            data: valueAspects.map(aspect => surveyData.value_ratings[aspect]['3 = Moderately valuable'] || 0),
+                            backgroundColor: '#f093fb'
+                        },
+                        {
+                            label: 'Slightly Valuable',
+                            data: valueAspects.map(aspect => surveyData.value_ratings[aspect]['2 = Slightly valuable'] || 0),
+                            backgroundColor: '#f5576c'
+                        },
+                        {
+                            label: 'Not Valuable',
+                            data: valueAspects.map(aspect => surveyData.value_ratings[aspect]['1 = Not valuable'] || 0),
+                            backgroundColor: '#ff9a9e'
+                        }
+                    ]
+                },
+                options: {
+                    ...chartConfig,
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
+
+            // Communication Preferences
+            new Chart(document.getElementById('commChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(surveyData.communication_preferences),
+                    datasets: [{
+                        data: Object.values(surveyData.communication_preferences),
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe']
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Circle Rating Distribution
+            const circleRatingData = [1, 2, 3, 4, 5].map(rating => surveyData.circle_ratings[rating + '.0'] || 0);
+            new Chart(document.getElementById('circleChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                    datasets: [{
+                        data: circleRatingData,
+                        backgroundColor: ['#ff9a9e', '#f5576c', '#f093fb', '#764ba2', '#667eea'],
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Event Preferences
+            new Chart(document.getElementById('eventsChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(surveyData.event_preferences),
+                    datasets: [{
+                        data: Object.values(surveyData.event_preferences),
+                        backgroundColor: '#764ba2',
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Contribution Methods Chart
+            new Chart(document.getElementById('contributionChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(surveyData.contribution_preferences),
+                    datasets: [{
+                        data: Object.values(surveyData.contribution_preferences),
+                        backgroundColor: '#f093fb',
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Add placeholder text for sections that will have full data
+            document.getElementById('circle-feedback').innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Circle feedback responses will be loaded from the full data file.</p>';
+            document.getElementById('community-goals').innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Community goals responses will be loaded from the full data file.</p>';
+            document.getElementById('content-preferences').innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Content preferences responses will be loaded from the full data file.</p>';
+            document.getElementById('suggestions').innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Suggestions and comments will be loaded from the full data file.</p>';
+        }
+
+        function toggleDetails(element) {
+            const details = element.querySelector('.response-details');
+            const button = element.querySelector('.expand-btn');
+            
+            details.classList.toggle('active');
+            button.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

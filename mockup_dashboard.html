@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALX Community Feedback Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .main-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section {
+            padding: 3rem 2rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        .text-responses {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .response-category {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .response-category:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .response-count {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .response-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .response-details.active {
+            display: block;
+        }
+
+        .scrollable-responses {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .scrollable-responses::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-thumb:hover {
+            background: #5a67d8;
+        }
+
+        .individual-response {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-style: italic;
+            color: #555;
+            border-left: 3px solid #667eea;
+            transition: all 0.2s ease;
+        }
+
+        .individual-response:hover {
+            background: #e8f4fd;
+            transform: translateX(3px);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .chart-small {
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.active {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>ALX Community Feedback Report</h1>
+            <p class="subtitle">Insights from 2,930 community members across Africa</p>
+            
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <span class="stat-number">2,930</span>
+                    <span class="stat-label">Total Responses</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">23</span>
+                    <span class="stat-label">Countries</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4.2</span>
+                    <span class="stat-label">Avg Circle Rating</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">87%</span>
+                    <span class="stat-label">Want to Contribute</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            
+            <!-- Geographic Distribution -->
+            <div class="section">
+                <h2 class="section-title">Geographic Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="countryChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Community Value Assessment -->
+            <div class="section">
+                <h2 class="section-title">How Valuable Are ALX Community Aspects?</h2>
+                <div class="chart-container">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Communication & Circle Experience -->
+            <div class="section">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="section-title">Preferred Communication</h2>
+                        <div class="chart-container chart-small">
+                            <canvas id="commChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="section-title">Circle Platform Rating</h2>
+                        <div class="chart-container chart-small">
+                            <canvas id="circleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circle Feedback -->
+            <div class="section">
+                <h2 class="section-title">Circle Platform Feedback</h2>
+                <div class="text-responses">
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Positive User Experience</span>
+                            <div>
+                                <span class="response-count">847</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="individual-response">"I love the interconnection from different geography and courses with a preview on skills and industry category."</div>
+                            <div class="individual-response">"The app is easy to navigate with all the communities easily accessible"</div>
+                            <div class="individual-response">"It creates a sense of community and a nice way to network with others."</div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Performance Issues</span>
+                            <div>
+                                <span class="response-count">423</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="individual-response">"Sometimes it takes soo long to load a single page"</div>
+                            <div class="individual-response">"CIRCLE APP is extremely slow, work on it."</div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Content Organization</span>
+                            <div>
+                                <span class="response-count">312</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="individual-response">"Anyone can post anything anywhere and we all have to see it."</div>
+                            <div class="individual-response">"The other content isn't nicely structured."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Goals -->
+            <div class="section">
+                <h2 class="section-title">Top Community Goals</h2>
+                <div class="chart-container">
+                    <canvas id="goalsChart"></canvas>
+                </div>
+                
+                <!-- Community Goals Text Responses -->
+                <div class="text-responses">
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">What members hope to gain (detailed responses)</h3>
+                    
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Career Development & Job Opportunities</span>
+                            <div>
+                                <span class="response-count">1,247</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Get a Job, get experience, gain knowledge"</div>
+                                <div class="individual-response">"Professional development through ALX programs and getting job opportunities and developing my career"</div>
+                                <div class="individual-response">"Gain high-industry sought skills and to gain better job opportunity"</div>
+                                <div class="individual-response">"Job opportunities, career guidance, and Interview guidance"</div>
+                                <div class="individual-response">"Get updates on masterclasses, networking events and job opportunities"</div>
+                                <div class="individual-response">"Scholarship, Job opportunity and knowledge"</div>
+                                <div class="individual-response">"Visibility for Web3NG, Lemopay and My AI agent development company"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Networking & Community Building</span>
+                            <div>
+                                <span class="response-count">892</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Network & connect with Africans"</div>
+                                <div class="individual-response">"Network, Community, Lifelong friendships"</div>
+                                <div class="individual-response">"Staying on top of industry trends and linking up with like minded people"</div>
+                                <div class="individual-response">"Get tech expertise, connect with peers with the same interest, and share insights"</div>
+                                <div class="individual-response">"Build a connection of people with the same professional interest e.g Accounting and finance, investment and mergers"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Skill Development & Learning</span>
+                            <div>
+                                <span class="response-count">756</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Data Science skills"</div>
+                                <div class="individual-response">"Talent Hub, Masterclasses, Upskilling"</div>
+                                <div class="individual-response">"Confidence in the evolving Workspace, job opportunities, network"</div>
+                                <div class="individual-response">"Personal and professional development- to be a better version of me"</div>
+                                <div class="individual-response">"Continuous development through blogs, articles and events"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Business & Entrepreneurship</span>
+                            <div>
+                                <span class="response-count">423</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Discover valuable talents for my startup social media and cofounders"</div>
+                                <div class="individual-response">"Actually participate in and win funds to scale my business"</div>
+                                <div class="individual-response">"Networking opportunities for jobs, business ventures/freelance, project collaborations"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Preferences -->
+            <div class="section">
+                <h2 class="section-title">Preferred Event Types</h2>
+                <div class="chart-container">
+                    <canvas id="eventsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Member Wants and Needs -->
+            <div class="section">
+                <h2 class="section-title">Member Wants and Needs</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Content & Resources Wanted</h3>
+                        <div class="chart-container chart-small">
+                            <canvas id="contentChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Interest Group Preferences</h3>
+                        <div class="chart-container chart-small">
+                            <canvas id="interestChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-responses">
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Career Tips & Opportunities</span>
+                            <div>
+                                <span class="response-count">1,156</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Career Tips & Opportunities"</div>
+                                <div class="individual-response">"Career tips, Personal development articles, job & internship opportunities"</div>
+                                <div class="individual-response">"Career tips, motivation videos, and masterclass session recordings"</div>
+                                <div class="individual-response">"Interview guidance, Job opportunities"</div>
+                                <div class="individual-response">"Job opportunites"</div>
+                                <div class="individual-response">"Career tips and How to skills"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Technical Skills & AI Content</span>
+                            <div>
+                                <span class="response-count">892</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Comprehensive sessions or resources on AI tools"</div>
+                                <div class="individual-response">"tech skills application from real life experts"</div>
+                                <div class="individual-response">"How to skill"</div>
+                                <div class="individual-response">"Web3 and AI knowledge base"</div>
+                                <div class="individual-response">"African leader videos and how to skill"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Industry Trends & Leadership</span>
+                            <div>
+                                <span class="response-count">567</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"New Industry trends, Career tips/Business Tips"</div>
+                                <div class="individual-response">"Articles on navigating life beyond the university classrooms"</div>
+                                <div class="individual-response">"Real life experiences and updates on topics of interests e.g what's the latest in tech world?"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem;">
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">How Members Want to Contribute</h3>
+                    <div class="chart-container chart-small">
+                        <canvas id="contributionChart"></canvas>
+                    </div>
+
+                    <div class="text-responses">
+                        <div class="response-category" onclick="toggleDetails(this)">
+                            <div class="category-header">
+                                <span>Content Creation & Sharing</span>
+                                <div>
+                                    <span class="response-count">1,234</span>
+                                    <button class="expand-btn">▼</button>
+                                </div>
+                            </div>
+                            <div class="response-details">
+                                <div class="scrollable-responses">
+                                    <div class="individual-response">"Sharing content (e.g., writing articles, sharing resources)"</div>
+                                    <div class="individual-response">"Sharing content and resources with the community"</div>
+                                    <div class="individual-response">"Writing articles and blog posts"</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="response-category" onclick="toggleDetails(this)">
+                            <div class="category-header">
+                                <span>Mentoring & Leadership</span>
+                                <div>
+                                    <span class="response-count">987</span>
+                                    <button class="expand-btn">▼</button>
+                                </div>
+                            </div>
+                            <div class="response-details">
+                                <div class="scrollable-responses">
+                                    <div class="individual-response">"Mentoring another member"</div>
+                                    <div class="individual-response">"Moderating a discussion channel or interest group"</div>
+                                    <div class="individual-response">"Hosting or co-hosting an online or in-person event"</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments and Suggestions -->
+            <div class="section">
+                <h2 class="section-title">Comments and Suggestions</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Community feedback for improving the ALX experience</p>
+                
+                <div class="text-responses">
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Platform & Technical Improvements</span>
+                            <div>
+                                <span class="response-count">678</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"CIRCLE APP is extremely slow, work on it."</div>
+                                <div class="individual-response">"Enable previous participants to be able to access previously completed courses on the learning platform. All my 2022 courses to date are inaccessible because I didn't pay the fee in Aug."</div>
+                                <div class="individual-response">"The fee should only be required to learn, after the course timeline, the course should still be accessible by the learner."</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Community Structure & Organization</span>
+                            <div>
+                                <span class="response-count">456</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Create separate skill advancement-based groups for all the different learning paths. This will encourage meaningful connections and foster insightful conversations among members."</div>
+                                <div class="individual-response">"We should maintain one group for everyone but also have sub-groups for different interests"</div>
+                                <div class="individual-response">"The Tuesday Tips are a good start. If it had it's own page, would be great."</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Opportunities & Accessibility</span>
+                            <div>
+                                <span class="response-count">534</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Providing job opportunities even if they are micro tasks will be a great incentive for students."</div>
+                                <div class="individual-response">"Please opportunities and scholarship should be available to all, not only considering academic grades, as some of us, attending high school was a big challenge due to many factors."</div>
+                                <div class="individual-response">"We can achieve global development goals more efficiently, If ALX can create a community for Grassroot tech skills development and empowerment, make physical hubs more accessible and available."</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="response-category" onclick="toggleDetails(this)">
+                        <div class="category-header">
+                            <span>Mentorship & Support</span>
+                            <div>
+                                <span class="response-count">312</span>
+                                <button class="expand-btn">▼</button>
+                            </div>
+                        </div>
+                        <div class="response-details">
+                            <div class="scrollable-responses">
+                                <div class="individual-response">"Having technical mentor sessions. Throughout my journey at ALX I have never been able to get a one on one session with a technical mentor."</div>
+                                <div class="individual-response">"I also think having these mentors at the hubs would help drive more traffic to the hubs. This would also indirectly encourage learners to network/collaborate with one another."</div>
+                                <div class="individual-response">"Hackathon - these can also be done at the hub, this would be so motivating to other learners."</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Sample data for mockup
+        const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        };
+
+        // Country Distribution Chart
+        new Chart(document.getElementById('countryChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Nigeria', 'Kenya', 'Ghana', 'South Africa', 'Ethiopia', 'Uganda', 'Rwanda', 'Others'],
+                datasets: [{
+                    data: [892, 445, 332, 287, 231, 198, 156, 389],
+                    backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'],
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...chartConfig,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Community Value Chart
+        new Chart(document.getElementById('valueChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Online Events', 'In-person Events', 'Circle Platform', 'Networking', 'Content & Resources'],
+                datasets: [
+                    {
+                        label: 'Extremely Valuable',
+                        data: [1456, 1123, 1678, 1789, 1892],
+                        backgroundColor: '#667eea'
+                    },
+                    {
+                        label: 'Very Valuable',
+                        data: [845, 923, 756, 689, 645],
+                        backgroundColor: '#764ba2'
+                    },
+                    {
+                        label: 'Moderately Valuable',
+                        data: [456, 567, 345, 289, 234],
+                        backgroundColor: '#f093fb'
+                    },
+                    {
+                        label: 'Slightly Valuable',
+                        data: [123, 234, 98, 123, 134],
+                        backgroundColor: '#f5576c'
+                    },
+                    {
+                        label: 'Not Valuable',
+                        data: [50, 83, 53, 40, 25],
+                        backgroundColor: '#ff9a9e'
+                    }
+                ]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true }
+                }
+            }
+        });
+
+        // Communication Preferences
+        new Chart(document.getElementById('commChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Email Newsletters', 'WhatsApp', 'Circle Platform', 'Telegram', 'Other'],
+                datasets: [{
+                    data: [1234, 987, 456, 167, 86],
+                    backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe']
+                }]
+            },
+            options: chartConfig
+        });
+
+        // Circle Rating Distribution
+        new Chart(document.getElementById('circleChart'), {
+            type: 'bar',
+            data: {
+                labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                datasets: [{
+                    data: [67, 234, 567, 1234, 828],
+                    backgroundColor: ['#ff9a9e', '#f5576c', '#f093fb', '#764ba2', '#667eea'],
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...chartConfig,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Community Goals
+        new Chart(document.getElementById('goalsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Career Development', 'Networking', 'Skill Building', 'Job Opportunities', 'Knowledge Sharing', 'Mentorship'],
+                datasets: [{
+                    data: [1567, 1234, 1123, 987, 789, 654],
+                    backgroundColor: '#667eea',
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...chartConfig,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Event Preferences
+        new Chart(document.getElementById('eventsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Skill-building Workshops', 'Career Development', 'Expert Q&A', 'Local Meetups', 'Social Hangouts', 'Presentations'],
+                datasets: [{
+                    data: [2134, 1987, 1456, 1234, 876, 745],
+                    backgroundColor: '#764ba2',
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...chartConfig,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Content & Resources Chart
+        new Chart(document.getElementById('contentChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Career Tips', 'Tech Skills', 'Industry Trends', 'Personal Development', 'Job Opportunities'],
+                datasets: [{
+                    data: [1156, 892, 567, 445, 334],
+                    backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe']
+                }]
+            },
+            options: chartConfig
+        });
+
+        // Interest Groups Chart
+        new Chart(document.getElementById('interestChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Developer Groups', 'Data Science', 'AI/ML', 'Business', 'Design', 'Other'],
+                datasets: [{
+                    data: [789, 567, 445, 334, 223, 156],
+                    backgroundColor: ['#43e97b', '#38f9d7', '#667eea', '#764ba2', '#f093fb', '#f5576c']
+                }]
+            },
+            options: chartConfig
+        });
+
+        // Contribution Methods Chart
+        new Chart(document.getElementById('contributionChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Content Sharing', 'Mentoring', 'Event Hosting', 'Moderating', 'Not Ready Yet'],
+                datasets: [{
+                    data: [1234, 987, 756, 654, 432],
+                    backgroundColor: '#f093fb',
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...chartConfig,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        function toggleDetails(element) {
+            const details = element.querySelector('.response-details');
+            const button = element.querySelector('.expand-btn');
+            
+            details.classList.toggle('active');
+            button.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

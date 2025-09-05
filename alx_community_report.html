@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALX Community Feedback Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --berkeley: #002B56;
+            --spring: #05F283;
+            --iris: #5648b7;
+            --white: #ffffff;
+            --bg-0: #001a31;
+            --bg-1: #021f3b;
+            --bg-2: #062b4d;
+            --text-0: #e6f0ff;
+            --text-1: #b7c7dc;
+            --divider: rgba(255,255,255,0.08);
+            --shadow: 0 10px 30px rgba(0,0,0,0.45);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(1200px 600px at 20% -10%, rgba(86,72,183,0.25) 0%, rgba(86,72,183,0) 60%),
+                        radial-gradient(1200px 800px at 120% 20%, rgba(5,242,131,0.16) 0%, rgba(5,242,131,0) 60%),
+                        linear-gradient(135deg, var(--bg-0) 0%, var(--berkeley) 45%, #0b2650 100%);
+            min-height: 100vh;
+            color: var(--text-0);
+        }
+
+        .header {
+            background: rgba(0, 43, 86, 0.65);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--white);
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-1);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.04) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            border: 1px solid var(--divider);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+            border-color: rgba(5,242,131,0.35);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--spring);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-1);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .main-content {
+            background: rgba(255,255,255,0.03);
+            margin: 2rem auto;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--divider);
+        }
+
+        .section {
+            padding: 3rem 2rem;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(180deg, var(--spring), var(--iris));
+            border-radius: 2px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        .text-responses {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--divider);
+        }
+
+        .response-category {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            border-radius: 8px;
+            border-left: 4px solid var(--iris);
+            border-right: 1px solid var(--divider);
+            border-top: 1px solid var(--divider);
+            border-bottom: 1px solid var(--divider);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .response-category:hover {
+            box-shadow: 0 8px 26px rgba(0,0,0,0.4);
+            transform: translateX(4px);
+            border-left-color: var(--spring);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--text-0);
+        }
+
+        .response-count {
+            background: var(--spring);
+            color: #0a2a4b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
+
+        .response-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(255,255,255,0.12);
+            display: none;
+        }
+
+        .response-details.active {
+            display: block;
+        }
+
+        .scrollable-responses {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .scrollable-responses::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--spring), #27f79a);
+            border-radius: 6px;
+        }
+
+        .scrollable-responses::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #27f79a, var(--spring));
+        }
+
+        .individual-response {
+            padding: 0.85rem 0.9rem;
+            margin-bottom: 0.6rem;
+            background: rgba(255,255,255,0.04);
+            border-radius: 8px;
+            color: var(--text-0);
+            border-left: 3px solid var(--iris);
+            transition: all 0.2s ease;
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .individual-response:hover {
+            background: rgba(5,242,131,0.07);
+            border-left-color: var(--spring);
+            transform: translateX(2px);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .chart-small {
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .data-source-toggle-main {
+                max-width: 300px;
+            }
+            
+            .data-toggle-btn-main {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .data-toggle-btn-sticky {
+                padding: 0.4rem 1rem;
+                font-size: 0.8rem;
+            }
+            
+            .sticky-toggle {
+                padding: 0.75rem 0;
+            }
+        }
+
+        .expand-btn {
+            background: rgba(5,242,131,0.08);
+            border: 1px solid var(--divider);
+            color: var(--spring);
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: transform 0.25s ease, background-color 0.25s ease;
+            margin-left: 0.5rem;
+            border-radius: 999px;
+            padding: 2px 8px;
+        }
+
+        .expand-btn.active {
+            transform: rotate(180deg);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-1);
+        }
+
+        .sentiment-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            padding: 0 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sentiment-filter-btn {
+            padding: 0.4rem 0.8rem;
+            border: 2px solid;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.03);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-0);
+        }
+
+        .sentiment-filter-btn.all {
+            border-color: var(--iris);
+            color: var(--text-0);
+        }
+
+        .sentiment-filter-btn.all.active,
+        .sentiment-filter-btn.all:hover {
+            background: var(--iris);
+            color: white;
+        }
+
+        .sentiment-filter-btn.positive {
+            border-color: var(--spring);
+            color: var(--spring);
+        }
+
+        .sentiment-filter-btn.positive.active,
+        .sentiment-filter-btn.positive:hover {
+            background: var(--spring);
+            color: #0a2a4b;
+        }
+
+        .sentiment-filter-btn.neutral {
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .sentiment-filter-btn.neutral.active,
+        .sentiment-filter-btn.neutral:hover {
+            background: #f59e0b;
+            color: #0a2a4b;
+        }
+
+        .sentiment-filter-btn.negative {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .sentiment-filter-btn.negative.active,
+        .sentiment-filter-btn.negative:hover {
+            background: #ef4444;
+            color: #0a2a4b;
+        }
+
+        .individual-response.hidden {
+            display: none;
+        }
+
+        .ai-summary {
+            background: linear-gradient(135deg, rgba(0,43,86,0.85) 0%, rgba(6,43,77,0.85) 100%);
+            color: var(--text-0);
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--divider);
+        }
+
+        .ai-summary::before {
+            content: '🤖';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .ai-summary-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .ai-summary-header::before {
+            content: '✨';
+            font-size: 1.2rem;
+        }
+
+        .ai-summary-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .ai-suggestions {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--iris);
+            border: 1px solid var(--divider);
+        }
+
+        .ai-suggestions-header {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .ai-suggestions-header::before {
+            content: '🎯';
+        }
+
+        .ai-suggestions-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ai-suggestions-list li {
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .ai-suggestions-list li::before {
+            content: '→';
+            color: var(--spring);
+            font-weight: bold;
+            margin-top: 0.1rem;
+        }
+
+        .ai-suggestions-list li:last-child {
+            margin-bottom: 0;
+        }
+        /* Theme toggle and light theme overrides */
+        .theme-toggle {
+            position: absolute;
+            right: 2rem;
+            top: 1rem;
+            background: rgba(255,255,255,0.06);
+            color: var(--text-0);
+            border: 1px solid var(--divider);
+            border-radius: 999px;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+        }
+        .theme-toggle svg { width: 18px; height: 18px; display: block; }
+        
+        /* Data Source Toggle Section */
+        .data-source-section {
+            background: linear-gradient(180deg, rgba(0,43,86,0.3) 0%, rgba(0,0,0,0) 100%);
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--divider);
+        }
+        
+        .data-source-toggle-main {
+            display: flex;
+            justify-content: center;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--divider);
+            border-radius: 999px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .data-toggle-btn-main {
+            padding: 0.75rem 2rem;
+            background: transparent;
+            color: var(--text-1);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            flex: 1;
+        }
+        
+        .data-toggle-btn-main.active {
+            background: var(--spring);
+            color: #0a2a4b;
+        }
+        
+        .data-toggle-btn-main:hover:not(.active) {
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* Sticky Toggle */
+        .sticky-toggle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+            background: rgba(0,43,86,0.95);
+            border-bottom: 1px solid var(--divider);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+        }
+        
+        .sticky-toggle.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .data-source-toggle-sticky {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--divider);
+            border-radius: 999px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .data-toggle-btn-sticky {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            color: var(--text-1);
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+        
+        .data-toggle-btn-sticky.active {
+            background: var(--spring);
+            color: #0a2a4b;
+        }
+        
+        .data-toggle-btn-sticky:hover:not(.active) {
+            background: rgba(255,255,255,0.15);
+        }
+        :root[data-theme="light"] body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333333;
+        }
+        :root[data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-bottom: none;
+        }
+        :root[data-theme="light"] .main-content {
+            background: #ffffff;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: none;
+        }
+        :root[data-theme="light"] .section {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        :root[data-theme="light"] .text-responses {
+            background: #f8f9fa;
+            border: none;
+        }
+        :root[data-theme="light"] .response-category {
+            background: #ffffff;
+            border-left: 4px solid #667eea;
+            border-right: none;
+            border-top: none;
+            border-bottom: none;
+        }
+        :root[data-theme="light"] .category-header {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        :root[data-theme="light"] .response-count {
+            background: #667eea;
+            color: #ffffff;
+            border: none;
+        }
+        :root[data-theme="light"] .individual-response {
+            background: #f8f9fa;
+            color: #555555;
+            border-left: 3px solid #667eea;
+        }
+        :root[data-theme="light"] .individual-response:hover {
+            background: #e8f4fd;
+            transform: translateX(3px);
+        }
+        :root[data-theme="light"] .expand-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+        :root[data-theme="light"] .loading {
+            color: #666666;
+        }
+        :root[data-theme="light"] .sentiment-filter-btn {
+            background: #ffffff;
+            font-weight: 500;
+            color: inherit;
+        }
+        :root[data-theme="light"] .sentiment-filter-btn.all { border-color: #667eea; color: #667eea; }
+        :root[data-theme="light"] .sentiment-filter-btn.all.active,
+        :root[data-theme="light"] .sentiment-filter-btn.all:hover { background: #667eea; color: #ffffff; }
+        :root[data-theme="light"] .sentiment-filter-btn.positive { border-color: #10b981; color: #10b981; }
+        :root[data-theme="light"] .sentiment-filter-btn.positive.active,
+        :root[data-theme="light"] .sentiment-filter-btn.positive:hover { background: #10b981; color: #ffffff; }
+        :root[data-theme="light"] .sentiment-filter-btn.neutral.active,
+        :root[data-theme="light"] .sentiment-filter-btn.neutral:hover { color: #ffffff; }
+        :root[data-theme="light"] .sentiment-filter-btn.negative.active,
+        :root[data-theme="light"] .sentiment-filter-btn.negative:hover { color: #ffffff; }
+        :root[data-theme="light"] .ai-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            border: none;
+        }
+        :root[data-theme="light"] .ai-suggestions {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid rgba(255, 255, 255, 0.3);
+            border: none;
+        }
+        :root[data-theme="light"] .theme-toggle {
+            background: #ffffff;
+            color: #2c3e50;
+            border: 1px solid #e5e7eb;
+        }
+        :root[data-theme="light"] .data-source-section {
+            background: linear-gradient(180deg, rgba(102, 126, 234, 0.1) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: 1px solid #e5e7eb;
+        }
+        :root[data-theme="light"] .data-source-toggle-main {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        :root[data-theme="light"] .data-toggle-btn-main {
+            color: #6b7280;
+        }
+        :root[data-theme="light"] .data-toggle-btn-main.active {
+            background: #667eea;
+            color: #ffffff;
+        }
+        :root[data-theme="light"] .data-toggle-btn-main:hover:not(.active) {
+            background: #f3f4f6;
+        }
+        :root[data-theme="light"] .sticky-toggle {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        :root[data-theme="light"] .data-source-toggle-sticky {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+        :root[data-theme="light"] .data-toggle-btn-sticky {
+            color: #6b7280;
+        }
+        :root[data-theme="light"] .data-toggle-btn-sticky.active {
+            background: #667eea;
+            color: #ffffff;
+        }
+        :root[data-theme="light"] .data-toggle-btn-sticky:hover:not(.active) {
+            background: #f3f4f6;
+        }
+        /* Ensure titles are readable in light mode */
+        :root[data-theme="light"] h1 {
+            color: #2c3e50;
+        }
+        :root[data-theme="light"] .section-title {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container" style="position: relative;">
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                <span id="themeIcon" aria-hidden="true">
+                    <!-- default icon injected by JS on load -->
+                </span>
+            </button>
+            <h1 id="reportTitle">ALX Online Community Report</h1>
+            <p class="subtitle">Insights from <span id="total-responses">Loading...</span> online community members across Africa</p>
+            
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <span class="stat-number" id="stat-total">...</span>
+                    <span class="stat-label">Total Responses</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="stat-countries">...</span>
+                    <span class="stat-label">Countries</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="stat-rating">...</span>
+                    <span class="stat-label">Avg Circle Rating</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="stat-contribute">...</span>
+                    <span class="stat-label">Want to Contribute</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Source Toggle Section -->
+    <div class="data-source-section" id="dataSourceSection">
+        <div class="container">
+            <div class="data-source-toggle-main">
+                <button class="data-toggle-btn-main active" onclick="switchDataSource('community')">Online Community</button>
+                <button class="data-toggle-btn-main" onclick="switchDataSource('city')">City Community</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Toggle (Hidden by default) -->
+    <div class="sticky-toggle" id="stickyToggle">
+        <div class="data-source-toggle-sticky">
+            <button class="data-toggle-btn-sticky active" onclick="switchDataSource('community')">Online Community</button>
+            <button class="data-toggle-btn-sticky" onclick="switchDataSource('city')">City Community</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            
+            <!-- Geographic Distribution -->
+            <div class="section">
+                <h2 class="section-title">Geographic Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="countryChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Community Value Assessment -->
+            <div class="section">
+                <h2 class="section-title">How Valuable Are ALX Community Aspects?</h2>
+                
+                <div class="ai-summary" id="ai-insights-value">
+                    <div class="ai-summary-header">AI Insights</div>
+                    <div class="ai-summary-content" id="ai-content-value">
+                        Content and resources shared with the community is the most highly valued aspect (812 extremely valuable ratings), followed closely by networking opportunities (718). The ALX community strongly appreciates tangible value through learning materials and professional connections. Circle platform and online events also receive strong positive ratings, indicating solid digital engagement infrastructure.
+                    </div>
+                    <div class="ai-suggestions">
+                        <div class="ai-suggestions-header">Focus Areas</div>
+                        <ul class="ai-suggestions-list" id="ai-suggestions-value">
+                            <li>Expand high-quality content library and resource sharing mechanisms since this drives the highest satisfaction</li>
+                            <li>Enhance networking features and facilitate more structured member connections given the strong appetite for professional relationships</li>
+                            <li>Maintain investment in online event quality and Circle platform improvements as these show consistent positive engagement</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Communication & Circle Experience -->
+            <div class="section">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="section-title">Preferred Communication</h2>
+                        <div class="chart-container chart-small">
+                            <canvas id="commChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="section-title">Circle Platform Rating</h2>
+                        <div class="chart-container chart-small">
+                            <canvas id="circleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circle Feedback -->
+            <div class="section">
+                <h2 class="section-title">Circle Platform Feedback</h2>
+                
+                <div class="ai-summary" id="ai-insights-circle">
+                    <div class="ai-summary-header">AI Insights</div>
+                    <div class="ai-summary-content" id="ai-content-circle">
+                        Circle receives predominantly positive feedback with users praising its community-building potential and networking capabilities. However, performance issues emerge as a key concern with multiple reports of slow loading times and laggy interactions. Content organization also needs attention, with users noting that posts lack structure and can be overwhelming to navigate.
+                    </div>
+                    <div class="ai-suggestions">
+                        <div class="ai-suggestions-header">Focus Areas</div>
+                        <ul class="ai-suggestions-list" id="ai-suggestions-circle">
+                            <li>Prioritize platform performance optimization to address widespread reports of slow loading and laggy user experience</li>
+                            <li>Implement better content organization and moderation tools to help users find relevant discussions more easily</li>
+                            <li>Leverage the positive sentiment around community building by adding features that facilitate meaningful professional connections</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="circle-feedback" class="text-responses">
+                    <div class="loading">Loading feedback...</div>
+                </div>
+            </div>
+
+            <!-- Community Goals -->
+            <div class="section">
+                <h2 class="section-title">Top Community Goals</h2>
+                
+                <div class="ai-summary" id="ai-insights-goals">
+                    <div class="ai-summary-header">AI Insights</div>
+                    <div class="ai-summary-content" id="ai-content-goals">
+                        Career development and job opportunities dominate member goals, reflecting ALX's mission to bridge the employment gap in Africa's tech sector. Networking and skill development are equally prioritized, showing members understand the importance of both technical growth and professional relationships. The entrepreneurial spirit is evident with significant interest in business opportunities and startup collaboration.
+                    </div>
+                    <div class="ai-suggestions">
+                        <div class="ai-suggestions-header">Focus Areas</div>
+                        <ul class="ai-suggestions-list" id="ai-suggestions-goals">
+                            <li>Establish dedicated job placement programs and partnerships with tech companies to directly address the overwhelming demand for career opportunities</li>
+                            <li>Create structured networking events and mentorship programs to systematically connect members with industry professionals and peers</li>
+                            <li>Develop entrepreneurship tracks and incubation support to nurture the growing interest in business ventures and startups</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="goalsChart"></canvas>
+                </div>
+                
+                <div id="community-goals" class="text-responses">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-0);">What members hope to gain (detailed responses)</h3>
+                    <div class="loading">Loading community goals...</div>
+                </div>
+            </div>
+
+            <!-- Event Preferences -->
+            <div class="section">
+                <h2 class="section-title">Preferred Event Types</h2>
+                <div class="chart-container">
+                    <canvas id="eventsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Member Wants and Needs -->
+            <div class="section">
+                <h2 class="section-title">Member Wants and Needs</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: var(--text-0);">Content & Resources Wanted</h3>
+                        <div class="chart-container chart-small">
+                            <canvas id="contentChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: var(--text-0);">Interest Group Preferences</h3>
+                        <div class="chart-container chart-small">
+                            <canvas id="interestChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-preferences" class="text-responses">
+                    <div class="loading">Loading content preferences...</div>
+                </div>
+
+                <div style="margin-top: 3rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-0);">How Members Want to Contribute</h3>
+                    <div class="chart-container chart-small">
+                        <canvas id="contributionChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="ai-summary" id="ai-insights-content">
+                    <div class="ai-summary-header">AI Insights</div>
+                    <div class="ai-summary-content" id="ai-content-content">
+                        Members show strong desire for career-focused content and technical skills development, with particular interest in AI and emerging technologies. The community wants practical, actionable resources rather than theoretical content. There's significant willingness to contribute through content sharing and mentoring, indicating a collaborative culture where members want to give back to help others succeed.
+                    </div>
+                    <div class="ai-suggestions">
+                        <div class="ai-suggestions-header">Focus Areas</div>
+                        <ul class="ai-suggestions-list" id="ai-suggestions-content">
+                            <li>Develop comprehensive career guidance content including job search strategies, interview preparation, and industry insights to meet the high demand</li>
+                            <li>Create hands-on technical workshops and AI/emerging tech learning paths that provide practical skills members can immediately apply</li>
+                            <li>Build structured peer-to-peer learning programs leveraging the community's willingness to mentor and share knowledge</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments and Suggestions -->
+            <div class="section">
+                <h2 class="section-title">Comments and Suggestions</h2>
+                
+                <div class="ai-summary" id="ai-insights-suggestions">
+                    <div class="ai-summary-header">AI Insights</div>
+                    <div class="ai-summary-content" id="ai-content-suggestions">
+                        Community suggestions reveal a balanced mix of constructive feedback focused on platform improvements and organizational enhancements. Members demonstrate strong engagement by offering specific, actionable ideas for better content organization, increased accessibility to opportunities, and enhanced mentorship systems. The tone is predominantly constructive, showing members are invested in ALX's success.
+                    </div>
+                    <div class="ai-suggestions">
+                        <div class="ai-suggestions-header">Focus Areas</div>
+                        <ul class="ai-suggestions-list" id="ai-suggestions-suggestions">
+                            <li>Address technical platform issues and improve Circle's performance, loading speeds, and overall user experience based on consistent feedback</li>
+                            <li>Create more structured community organization with skill-based groups, clearer content categorization, and improved navigation systems</li>
+                            <li>Expand mentorship opportunities and make success resources more accessible, particularly for underrepresented groups and career changers</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p style="color: var(--text-1); margin-bottom: 2rem;">Community feedback for improving the ALX experience</p>
+                
+                <div id="suggestions" class="text-responses">
+                    <div class="loading">Loading suggestions...</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="survey_data.js"></script>
+    <script src="city_survey_data.js"></script>
+    <script>
+        // Theme setup
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const preferred = stored === 'light' || stored === 'dark' ? stored : 'dark';
+            document.documentElement.setAttribute('data-theme', preferred);
+            const toggle = () => {
+                const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', current);
+                localStorage.setItem('theme', current);
+                updateChartsTheme(current);
+                updateToggleLabel(current);
+            };
+            function updateToggleLabel(theme) {
+                const iconSpan = document.getElementById('themeIcon');
+                if (!iconSpan) return;
+                if (theme === 'dark') {
+                    iconSpan.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13a1 1 0 0 0-1.05-.14A8 8 0 1 1 11.1 3.41a1 1 0 0 0-.14-1.05 1 1 0 0 0-1.09-.31A10 10 0 1 0 22 14.09a1 1 0 0 0-.36-1.09Z"/></svg>';
+                } else {
+                    iconSpan.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zM19.16 6.76l1.4-1.4 1.8 1.79-1.41 1.41-1.79-1.8zM12 6a6 6 0 100 12 6 6 0 000-12z"/></svg>';
+                }
+            }
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('themeToggle');
+                if (btn) btn.addEventListener('click', toggle);
+                updateToggleLabel(document.documentElement.getAttribute('data-theme'));
+            });
+            window.updateChartsTheme = function(theme) {
+                const tick = theme === 'dark' ? '#d9e6ff' : '#374151';
+                const grid = theme === 'dark' ? 'rgba(255,255,255,0.12)' : '#e5e7eb';
+                (window._charts || []).forEach(ch => {
+                    if (ch.options?.plugins?.legend?.labels) {
+                        ch.options.plugins.legend.labels.color = tick;
+                    }
+                    if (ch.options?.scales) {
+                        Object.values(ch.options.scales).forEach(sc => {
+                            if (sc.ticks) sc.ticks.color = tick;
+                            if (sc.grid && sc.grid.color !== 'transparent') sc.grid.color = grid;
+                        });
+                    }
+                    ch.update();
+                });
+            };
+        })();
+        // Global variables for data management
+        let currentDataSource = 'community';
+        let currentData = null;
+        
+        // Data source switching
+        function switchDataSource(source) {
+            if (currentDataSource === source) return;
+            
+            currentDataSource = source;
+            currentData = source === 'community' ? surveyData : citySurveyData;
+            
+            // Update all toggle buttons (both main and sticky)
+            document.querySelectorAll('.data-toggle-btn-main, .data-toggle-btn-sticky').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to buttons for the selected source
+            document.querySelectorAll(`[onclick="switchDataSource('${source}')"]`).forEach(btn => {
+                btn.classList.add('active');
+            });
+            
+            // Update title and subtitle
+            const title = document.getElementById('reportTitle');
+            const subtitle = document.querySelector('.subtitle');
+            
+            if (source === 'community') {
+                title.textContent = 'ALX Online Community Report';
+                subtitle.innerHTML = 'Insights from <span id="total-responses">Loading...</span> online community members across Africa';
+            } else {
+                title.textContent = 'ALX City Community Report';
+                subtitle.innerHTML = 'Insights from <span id="total-responses">Loading...</span> city-based community members across Africa';
+            }
+            
+            // Reinitialize the report with new data
+            initializeReport();
+            
+            // Update AI insights
+            updateAIInsights(source);
+        }
+
+        // Update AI insights based on data source
+        function updateAIInsights(source) {
+            const insights = getAIInsights(source);
+            
+            // Update all AI insight sections
+            Object.keys(insights).forEach(section => {
+                const contentElement = document.getElementById(`ai-content-${section}`);
+                const suggestionsElement = document.getElementById(`ai-suggestions-${section}`);
+                
+                if (contentElement && insights[section].content) {
+                    contentElement.textContent = insights[section].content;
+                }
+                
+                if (suggestionsElement && insights[section].suggestions) {
+                    suggestionsElement.innerHTML = insights[section].suggestions.map(suggestion => 
+                        `<li>${suggestion}</li>`
+                    ).join('');
+                }
+            });
+        }
+
+        // Get AI insights based on data source
+        function getAIInsights(source) {
+            if (source === 'community') {
+                return {
+                    value: {
+                        content: "Content and resources shared with the community is the most highly valued aspect (812 extremely valuable ratings), followed closely by networking opportunities (718). The ALX community strongly appreciates tangible value through learning materials and professional connections. Circle platform and online events also receive strong positive ratings, indicating solid digital engagement infrastructure.",
+                        suggestions: [
+                            "Expand high-quality content library and resource sharing mechanisms since this drives the highest satisfaction",
+                            "Enhance networking features and facilitate more structured member connections given the strong appetite for professional relationships",
+                            "Maintain investment in online event quality and Circle platform improvements as these show consistent positive engagement"
+                        ]
+                    },
+                    circle: {
+                        content: "Circle receives predominantly positive feedback with users praising its community-building potential and networking capabilities. However, performance issues emerge as a key concern with multiple reports of slow loading times and laggy interactions. Content organization also needs attention, with users noting that posts lack structure and can be overwhelming to navigate.",
+                        suggestions: [
+                            "Prioritize platform performance optimization to address widespread reports of slow loading and laggy user experience",
+                            "Implement better content organization and moderation tools to help users find relevant discussions more easily",
+                            "Leverage the positive sentiment around community building by adding features that facilitate meaningful professional connections"
+                        ]
+                    },
+                    goals: {
+                        content: "Career development and job opportunities dominate member goals, reflecting ALX's mission to bridge the employment gap in Africa's tech sector. Networking and skill development are equally prioritized, showing members understand the importance of both technical growth and professional relationships. The entrepreneurial spirit is evident with significant interest in business opportunities and startup collaboration.",
+                        suggestions: [
+                            "Establish dedicated job placement programs and partnerships with tech companies to directly address the overwhelming demand for career opportunities",
+                            "Create structured networking events and mentorship programs to systematically connect members with industry professionals and peers",
+                            "Develop entrepreneurship tracks and incubation support to nurture the growing interest in business ventures and startups"
+                        ]
+                    },
+                    content: {
+                        content: "Members show strong desire for career-focused content and technical skills development, with particular interest in AI and emerging technologies. The community wants practical, actionable resources rather than theoretical content. There's significant willingness to contribute through content sharing and mentoring, indicating a collaborative culture where members want to give back to help others succeed.",
+                        suggestions: [
+                            "Develop comprehensive career guidance content including job search strategies, interview preparation, and industry insights to meet the high demand",
+                            "Create hands-on technical workshops and AI/emerging tech learning paths that provide practical skills members can immediately apply",
+                            "Build structured peer-to-peer learning programs leveraging the community's willingness to mentor and share knowledge"
+                        ]
+                    },
+                    suggestions: {
+                        content: "Community suggestions reveal a balanced mix of constructive feedback focused on platform improvements and organizational enhancements. Members demonstrate strong engagement by offering specific, actionable ideas for better content organization, increased accessibility to opportunities, and enhanced mentorship systems. The tone is predominantly constructive, showing members are invested in ALX's success.",
+                        suggestions: [
+                            "Address technical platform issues and improve Circle's performance, loading speeds, and overall user experience based on consistent feedback",
+                            "Create more structured community organization with skill-based groups, clearer content categorization, and improved navigation systems",
+                            "Expand mentorship opportunities and make success resources more accessible, particularly for underrepresented groups and career changers"
+                        ]
+                    }
+                };
+            } else {
+                // City community insights
+                return {
+                    value: {
+                        content: "City-based community members show strong appreciation for content and resources (44 extremely valuable ratings), with networking opportunities closely following (43 extremely valuable). In-person events receive the highest satisfaction (40 extremely valuable), reflecting the city communities' preference for face-to-face interactions. This suggests city-based members particularly value local connections and physical presence in their professional development.",
+                        suggestions: [
+                            "Prioritize in-person event organization in major cities to leverage the strong preference for face-to-face interactions",
+                            "Develop city-specific content that addresses local job markets, networking opportunities, and industry landscapes",
+                            "Create hub-based programs that facilitate regular meetups and collaborative workspaces for city community members"
+                        ]
+                    },
+                    circle: {
+                        content: "City community members show mixed feedback on Circle, with many appreciating its networking potential but expressing concerns about content organization and platform engagement. Notably, many city-based members prefer WhatsApp and other instant messaging for communication, suggesting a preference for real-time, mobile-first interactions over traditional forum-style platforms.",
+                        suggestions: [
+                            "Develop mobile-optimized features that mirror instant messaging experiences while maintaining community structure",
+                            "Create city-specific channels within Circle to organize content by geographic location and local interests",
+                            "Integrate Circle with popular local communication platforms to bridge the gap between preferred communication methods"
+                        ]
+                    },
+                    goals: {
+                        content: "City community members are heavily focused on career advancement and job placement, with networking being a critical component of their strategy. Unlike the online community, city-based members show stronger emphasis on local job opportunities and region-specific career paths. There's significant interest in building professional relationships within their geographic area and leveraging local industry connections.",
+                        suggestions: [
+                            "Establish city-specific job placement partnerships with local companies and recruitment agencies",
+                            "Create regional mentorship programs connecting city community members with local industry professionals",
+                            "Develop location-based networking events and career fairs tailored to each city's unique job market and industry focus"
+                        ]
+                    },
+                    content: {
+                        content: "City community members prioritize practical career guidance and skills development, with strong demand for location-specific content. They seek resources that address local job markets, city-specific networking strategies, and region-relevant industry insights. There's notable interest in content that helps them navigate their local tech ecosystems and build meaningful professional relationships within their cities.",
+                        suggestions: [
+                            "Create city-specific career guides covering local job markets, salary expectations, and industry landscapes",
+                            "Develop regional skill development programs focusing on technologies and skills in demand in specific cities",
+                            "Establish local content creation initiatives where city community members share insights about their regional tech scenes"
+                        ]
+                    },
+                    suggestions: {
+                        content: "City community feedback emphasizes the need for stronger local presence and region-specific support. Many suggest reopening closed hubs, establishing new physical locations, and creating more opportunities for in-person collaboration. The feedback reflects a desire for ALX to maintain strong local roots while providing global opportunities, with particular emphasis on supporting underrepresented regions and inclusive growth.",
+                        suggestions: [
+                            "Prioritize reopening and expanding physical hub locations in underserved cities to provide local support and collaboration spaces",
+                            "Develop region-specific programs that address the unique challenges and opportunities in different African cities",
+                            "Create inclusive community management approaches that ensure equal representation and support across all city locations"
+                        ]
+                    }
+                };
+            }
+        }
+
+        // Sticky toggle behavior
+        function setupStickyToggle() {
+            const dataSourceSection = document.getElementById('dataSourceSection');
+            const stickyToggle = document.getElementById('stickyToggle');
+            
+            if (!dataSourceSection || !stickyToggle) return;
+            
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            // Data source section is visible, hide sticky toggle
+                            stickyToggle.classList.remove('visible');
+                        } else {
+                            // Data source section is not visible, show sticky toggle
+                            stickyToggle.classList.add('visible');
+                        }
+                    });
+                },
+                { threshold: 0.1 }
+            );
+            
+            observer.observe(dataSourceSection);
+        }
+
+        // Initialize report when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            currentData = surveyData; // Start with community data
+            initializeReport();
+            setupStickyToggle();
+        });
+
+        function initializeReport() {
+            if (!currentData) return;
+
+            // Update header statistics
+            document.getElementById('total-responses').textContent = currentData.stats.total_responses.toLocaleString();
+            document.getElementById('stat-total').textContent = currentData.stats.total_responses.toLocaleString();
+            document.getElementById('stat-countries').textContent = currentData.stats.countries_count;
+            document.getElementById('stat-rating').textContent = currentData.stats.avg_circle_rating;
+            document.getElementById('stat-contribute').textContent = currentData.stats.contribution_percentage + '%';
+
+            // Clear existing charts
+            if (window._charts) {
+                window._charts.forEach(chart => chart.destroy());
+                window._charts = [];
+            }
+
+            // Initialize all charts and content
+            createCharts();
+            renderTextResponses();
+        }
+
+        const darkGrid = 'rgba(255,255,255,0.12)';
+        const darkTick = '#d9e6ff';
+        const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: darkTick,
+                        boxWidth: 14,
+                        usePointStyle: true,
+                        padding: 16
+                    }
+                }
+            }
+        };
+
+        function createCharts() {
+            // Country Distribution Chart
+            const countryLabels = Object.keys(currentData.countries).slice(0, 8);
+            const countryData = Object.values(currentData.countries).slice(0, 8);
+            
+            const c1 = new Chart(document.getElementById('countryChart'), {
+                type: 'bar',
+                data: {
+                    labels: countryLabels,
+                    datasets: [{
+                        data: countryData,
+                        backgroundColor: ['#05F283', '#27f79a', '#8d82e6', '#5648b7', '#2a6aa0', '#00d27f', '#38f9d7', '#7bdcb5'],
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                        y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkTick } }
+                    }
+                }
+            });
+            (window._charts = window._charts || []).push(c1);
+
+            // Community Value Chart (Stacked)
+            const valueAspects = Object.keys(currentData.value_ratings);
+            const valueData = {
+                labels: valueAspects.map(aspect => aspect.replace(' (e.g., webinars, workshops)', '').replace(' (e.g., meetups, networking sessions)', '')),
+                datasets: [
+                    {
+                        label: 'Extremely Valuable',
+                        data: valueAspects.map(aspect => currentData.value_ratings[aspect]['5 = Extremely valuable'] || 0),
+                        backgroundColor: '#05F283'
+                    },
+                    {
+                        label: 'Very Valuable',
+                        data: valueAspects.map(aspect => currentData.value_ratings[aspect]['4 = Very valuable'] || 0),
+                        backgroundColor: '#5648b7'
+                    },
+                    {
+                        label: 'Moderately Valuable',
+                        data: valueAspects.map(aspect => currentData.value_ratings[aspect]['3 = Moderately valuable'] || 0),
+                        backgroundColor: '#27f79a'
+                    },
+                    {
+                        label: 'Slightly Valuable',
+                        data: valueAspects.map(aspect => currentData.value_ratings[aspect]['2 = Slightly valuable'] || 0),
+                        backgroundColor: '#8d82e6'
+                    },
+                    {
+                        label: 'Not Valuable',
+                        data: valueAspects.map(aspect => currentData.value_ratings[aspect]['1 = Not valuable'] || 0),
+                        backgroundColor: '#2a6aa0'
+                    }
+                ]
+            };
+
+            const c2 = new Chart(document.getElementById('valueChart'), {
+                type: 'bar',
+                data: valueData,
+                options: {
+                    ...chartConfig,
+                    scales: {
+                        x: { stacked: true, grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                        y: { stacked: true, beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkTick } }
+                    }
+                }
+            });
+            (window._charts = window._charts || []).push(c2);
+
+            // Communication Preferences
+            const c3 = new Chart(document.getElementById('commChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(currentData.communication_preferences),
+                    datasets: [{
+                        data: Object.values(currentData.communication_preferences),
+                        backgroundColor: ['#05F283', '#5648b7', '#27f79a', '#8d82e6', '#2a6aa0'],
+                        borderColor: '#07213d',
+                        borderWidth: 1
+                    }]
+                },
+                options: chartConfig
+            });
+            (window._charts = window._charts || []).push(c3);
+
+            // Circle Rating Distribution
+            const circleRatingLabels = ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'];
+            const circleRatingData = [1, 2, 3, 4, 5].map(rating => currentData.circle_ratings[rating + '.0'] || 0);
+
+            const c4 = new Chart(document.getElementById('circleChart'), {
+                type: 'bar',
+                data: {
+                    labels: circleRatingLabels,
+                    datasets: [{
+                        data: circleRatingData,
+                        backgroundColor: ['#2a6aa0', '#8d82e6', '#5648b7', '#27f79a', '#05F283'],
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                        y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkTick } }
+                    }
+                }
+            });
+            (window._charts = window._charts || []).push(c4);
+
+            // Community Goals Chart
+            const goalsData = currentData.categorized_responses.community_goals;
+            const goalLabels = Object.keys(goalsData);
+            const goalCounts = Object.values(goalsData).map(arr => arr.length);
+
+            const c5 = new Chart(document.getElementById('goalsChart'), {
+                type: 'bar',
+                data: {
+                    labels: goalLabels,
+                    datasets: [{
+                        data: goalCounts,
+                        backgroundColor: '#05F283',
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                        y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkTick } }
+                    }
+                }
+            });
+            (window._charts = window._charts || []).push(c5);
+
+            // Event Preferences
+            const c6 = new Chart(document.getElementById('eventsChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(currentData.event_preferences),
+                    datasets: [{
+                        data: Object.values(currentData.event_preferences),
+                        backgroundColor: '#5648b7',
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                        y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkTick } }
+                    }
+                }
+            });
+            (window._charts = window._charts || []).push(c6);
+
+            // Content Preferences Chart
+            const contentData = currentData.categorized_responses.content_preferences;
+            const c7 = new Chart(document.getElementById('contentChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(contentData),
+                    datasets: [{
+                        data: Object.values(contentData).map(arr => arr.length),
+                        backgroundColor: ['#05F283', '#5648b7', '#27f79a', '#8d82e6', '#2a6aa0', '#7bdcb5'],
+                        borderColor: '#07213d',
+                        borderWidth: 1
+                    }]
+                },
+                options: chartConfig
+            });
+            (window._charts = window._charts || []).push(c7);
+
+            // Interest Groups Chart
+            const interestData = currentData.categorized_responses.interest_groups;
+            const c8 = new Chart(document.getElementById('interestChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(interestData),
+                    datasets: [{
+                        data: Object.values(interestData).map(arr => arr.length),
+                        backgroundColor: ['#27f79a', '#05F283', '#5648b7', '#8d82e6', '#2a6aa0', '#7bdcb5'],
+                        borderColor: '#07213d',
+                        borderWidth: 1
+                    }]
+                },
+                options: chartConfig
+            });
+            (window._charts = window._charts || []).push(c8);
+
+            // Contribution Methods Chart
+            const c9 = new Chart(document.getElementById('contributionChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(currentData.contribution_preferences),
+                    datasets: [{
+                        data: Object.values(currentData.contribution_preferences),
+                        backgroundColor: '#8d82e6',
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                        y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkTick } }
+                    }
+                }
+            });
+            (window._charts = window._charts || []).push(c9);
+        }
+
+        function renderTextResponses() {
+            // Circle Feedback
+            renderResponseCategories('circle-feedback', currentData.categorized_responses.circle_feedback);
+            
+            // Community Goals
+            renderResponseCategories('community-goals', currentData.categorized_responses.community_goals);
+            
+            // Content Preferences
+            renderResponseCategories('content-preferences', currentData.categorized_responses.content_preferences);
+            
+            // Suggestions
+            renderResponseCategories('suggestions', currentData.categorized_responses.suggestions);
+        }
+
+        function getSentimentIcon(sentiment) {
+            switch(sentiment) {
+                case 'positive': return '🟢';
+                case 'negative': return '🔴';
+                case 'neutral': 
+                default: return '🟡';
+            }
+        }
+
+        function renderResponseCategories(containerId, categories) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            Object.entries(categories).forEach(([categoryName, responses]) => {
+                if (responses.length === 0) return;
+
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'response-category';
+                
+                // Count sentiments for this category
+                let positiveCount = 0, neutralCount = 0, negativeCount = 0;
+                responses.forEach(response => {
+                    if (typeof response === 'string') {
+                        neutralCount++;
+                    } else {
+                        switch(response.sentiment) {
+                            case 'positive': positiveCount++; break;
+                            case 'negative': negativeCount++; break;
+                            default: neutralCount++; break;
+                        }
+                    }
+                });
+
+                // Generate unique ID for this category
+                const categoryId = `${containerId}_${categoryName.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+                // Handle both old format (strings) and new format (objects with sentiment)
+                const responsesHTML = responses.map((response, index) => {
+                    if (typeof response === 'string') {
+                        // Old format - default to neutral
+                        return `<div class="individual-response" data-sentiment="neutral" data-index="${index}">🟡 "${response}"</div>`;
+                    } else {
+                        // New format with sentiment
+                        const icon = getSentimentIcon(response.sentiment);
+                        return `<div class="individual-response" data-sentiment="${response.sentiment}" data-index="${index}">${icon} "${response.text}"</div>`;
+                    }
+                }).join('');
+
+                categoryDiv.innerHTML = `
+                    <div class="category-header" onclick="toggleDetails(this.parentElement)">
+                        <span>${categoryName}</span>
+                        <div>
+                            <span class="response-count">${responses.length}</span>
+                            <button class="expand-btn">▼</button>
+                        </div>
+                    </div>
+                    <div class="response-details">
+                        <div class="sentiment-filters">
+                            <button class="sentiment-filter-btn all active" onclick="event.stopPropagation(); filterSentiment('${categoryId}', 'all', this)">
+                                All (${responses.length})
+                            </button>
+                            <button class="sentiment-filter-btn positive" onclick="event.stopPropagation(); filterSentiment('${categoryId}', 'positive', this)" ${positiveCount === 0 ? 'style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                🟢 Positive (${positiveCount})
+                            </button>
+                            <button class="sentiment-filter-btn neutral" onclick="event.stopPropagation(); filterSentiment('${categoryId}', 'neutral', this)" ${neutralCount === 0 ? 'style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                🟡 Neutral (${neutralCount})
+                            </button>
+                            <button class="sentiment-filter-btn negative" onclick="event.stopPropagation(); filterSentiment('${categoryId}', 'negative', this)" ${negativeCount === 0 ? 'style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                🔴 Negative (${negativeCount})
+                            </button>
+                        </div>
+                        <div class="scrollable-responses" id="${categoryId}">
+                            ${responsesHTML}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function toggleDetails(element) {
+            const details = element.querySelector('.response-details');
+            const button = element.querySelector('.expand-btn');
+            
+            details.classList.toggle('active');
+            button.classList.toggle('active');
+        }
+
+        function filterSentiment(categoryId, sentiment, clickedButton) {
+            // Prevent filtering if the category is collapsed or button is disabled
+            if (clickedButton.style.opacity === '0.5') return;
+
+            const container = document.getElementById(categoryId);
+            const responses = container.querySelectorAll('.individual-response');
+            const filterButtons = clickedButton.parentElement.querySelectorAll('.sentiment-filter-btn');
+
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+
+            // Filter responses
+            responses.forEach(response => {
+                const responseSentiment = response.getAttribute('data-sentiment');
+                
+                if (sentiment === 'all' || responseSentiment === sentiment) {
+                    response.classList.remove('hidden');
+                } else {
+                    response.classList.add('hidden');
+                }
+            });
+
+            // Update scroll position to top after filtering
+            container.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
