@@ -7,6 +7,9 @@ Processes CSV survey data and creates categorized analysis for interactive HTML 
 import pandas as pd
 import json
 import re
+import difflib
+import unicodedata
+from datetime import datetime
 from collections import Counter, defaultdict
 from typing import Dict, List, Any
 
@@ -16,15 +19,237 @@ def clean_text(text):
         return ""
     return str(text).strip()
 
+def _normalize_location_string(raw: Any) -> str:
+    """Normalize a free-text location to a simplified ASCII-ish lowercase string."""
+    if pd.isna(raw) or raw == '':
+        return ''
+    text = str(raw).strip()
+    # Replace unusual apostrophes/quotes with ASCII
+    text = text.replace('’', "'").replace('‘', "'").replace('“', '"').replace('”', '"')
+    # Collapse consecutive whitespace
+    text = re.sub(r"\s+", ' ', text)
+    # Lowercase
+    text = text.lower()
+    # Strip emoji and symbols by allowing letters, spaces, commas, apostrophes, hyphens
+    text = re.sub(r"[^a-z\s,'\-]", '', text)
+    # Normalize accents for matching (we will restore canonical country names later)
+    text = unicodedata.normalize('NFKD', text)
+    text = ''.join(ch for ch in text if not unicodedata.combining(ch))
+    # Collapse spaces again after removals
+    text = re.sub(r"\s+", ' ', text).strip()
+    return text
+
+KNOWN_COUNTRIES = [
+    'Algeria','Angola','Benin','Botswana','Burkina Faso','Burundi','Cabo Verde','Cameroon','Central African Republic',
+    'Chad','Comoros','Congo','Democratic Republic of Congo','Côte d\'Ivoire','Djibouti','Egypt','Equatorial Guinea','Eritrea',
+    'Eswatini','Ethiopia','Gabon','Gambia','Ghana','Guinea','Guinea-Bissau','Kenya','Lesotho','Liberia','Libya','Madagascar',
+    'Malawi','Mali','Mauritania','Mauritius','Morocco','Mozambique','Namibia','Niger','Nigeria','Rwanda','Sao Tome and Principe',
+    'Senegal','Seychelles','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda',
+    'Zambia','Zimbabwe',
+    # Non-African commonly appearing
+    'United States','United Kingdom','Canada','Germany','France','Saudi Arabia','United Arab Emirates','Brazil','Vietnam','Hungary','Belgium','South Korea','Turkey','Türkiye'
+]
+
+# Map common city/region terms to countries
+CITY_TO_COUNTRY = {
+    # Nigeria
+    'lagos': 'Nigeria', 'abuja': 'Nigeria', 'ogun': 'Nigeria', 'ogun state': 'Nigeria', 'imo': 'Nigeria', 'imo state': 'Nigeria',
+    # Kenya
+    'nairobi': 'Kenya', 'nairobi metropolitan area': 'Kenya', 'mombasa': 'Kenya', 'kericho': 'Kenya',
+    # Ghana
+    'accra': 'Ghana', 'kumasi': 'Ghana',
+    # South Africa
+    'cape town': 'South Africa', 'johannesburg': 'South Africa', 'durban': 'South Africa', 'pretoria': 'South Africa',
+    # Rwanda
+    'kigali': 'Rwanda',
+    # Egypt
+    'cairo': 'Egypt', 'alexandria': 'Egypt',
+    # Ethiopia
+    'addis ababa': 'Ethiopia',
+    # Morocco
+    'casablanca': 'Morocco', 'rabat': 'Morocco',
+    # Uganda
+    'kampala': 'Uganda',
+    # Zambia
+    'lusaka': 'Zambia',
+    # Zimbabwe
+    'harare': 'Zimbabwe', 'bulawayo': 'Zimbabwe',
+    # Botswana
+    'gaborone': 'Botswana',
+    # Namibia
+    'windhoek': 'Namibia',
+    # Cote d'Ivoire
+    'abidjan': "Côte d'Ivoire", 'yamoussoukro': "Côte d'Ivoire",
+    # DRC
+    'kinshasa': 'Democratic Republic of Congo', 'lubumbashi': 'Democratic Republic of Congo',
+    # Tunisia
+    'tunis': 'Tunisia',
+    # Saudi / UAE
+    'riyadh': 'Saudi Arabia', 'jeddah': 'Saudi Arabia', 'dubai': 'United Arab Emirates', 'abu dhabi': 'United Arab Emirates',
+    # Others
+    'victoria': 'Seychelles', 'antananarivo': 'Madagascar', 'porto-novo': 'Benin', 'porto novo': 'Benin', 'cotonou': 'Benin',
+    'bissau': 'Guinea-Bissau', 'bangui': 'Central African Republic', 'monrovia': 'Liberia', 'freetown': 'Sierra Leone',
+    'lilongwe': 'Malawi', 'blantyre': 'Malawi', 'dodoma': 'Tanzania', 'dar es salaam': 'Tanzania', 'yaounde': 'Cameroon', 'yaoundé': 'Cameroon', 'douala': 'Cameroon', 'nouakchott': 'Mauritania', 'mbabane': 'Eswatini', 'maseru': 'Lesotho'
+}
+
+CANONICAL_NAME_FIXES = {
+    'cote divoire': "Côte d'Ivoire",
+    'cote d ivoire': "Côte d'Ivoire",
+    'cote d\'ivoire': "Côte d'Ivoire",
+    'south  africa': 'South Africa',
+    'uae': 'United Arab Emirates',
+    'uk': 'United Kingdom',
+    'usa': 'United States',
+    'us': 'United States',
+    'britain': 'United Kingdom',
+    'england': 'United Kingdom',
+    'sa': 'South Africa',
+    'rsa': 'South Africa',
+    'ken': 'Kenya',
+    'keny': 'Kenya',
+    'kennya': 'Kenya',
+    'ghan': 'Ghana',
+    'egy': 'Egypt',
+    'ethi': 'Ethiopia',
+    'rwan': 'Rwanda',
+    'moro': 'Morocco',
+    'maroc': 'Morocco',
+    'marocco': 'Morocco',
+    'zimb': 'Zimbabwe',
+    'tanz': 'Tanzania',
+    'zamb': 'Zambia',
+    'camer': 'Cameroon',
+    'nig': 'Nigeria'
+}
+
+NON_COUNTRY_BLACKLIST_EXACT = {
+    'tourism and hospitality', 'country', 'marketing'
+}
+NON_COUNTRY_BLACKLIST_SUBSTR = {
+    'gmail', 'yahoo', 'outlook', 'hotmail', 'mail', 'gmailcom', 'yahoocom', 'email', 'com', 'http', 'https'
+}
+
+def _best_country_match(text_normalized: str) -> str:
+    """Try to match a normalized string to a canonical country using heuristics and fuzzy matching."""
+    if not text_normalized:
+        return ''
+
+    # If contains comma, take the last part (often the country)
+    if ',' in text_normalized:
+        parts = [p.strip() for p in text_normalized.split(',') if p.strip()]
+        if len(parts) >= 2:
+            text_normalized = parts[-1]
+
+    # Direct city mapping
+    if text_normalized in CITY_TO_COUNTRY:
+        return CITY_TO_COUNTRY[text_normalized]
+
+    # Canonical short/alias fixes
+    if text_normalized in CANONICAL_NAME_FIXES:
+        return CANONICAL_NAME_FIXES[text_normalized]
+
+    # Special-case common shadowing: ensure 'Nigeria' wins over 'Niger'
+    if re.search(r"\bnigeria\b", text_normalized):
+        return 'Nigeria'
+
+    # Direct includes of country names using word boundaries, prefer longer country names first
+    for country in sorted(KNOWN_COUNTRIES, key=lambda c: -len(c)):
+        pattern = r"\b" + re.escape(country.lower()) + r"\b"
+        if re.search(pattern, text_normalized):
+            return country
+
+    # Try fuzzy matching to country list (threshold tuned for short typos like "Keny", "Nig")
+    candidates = difflib.get_close_matches(text_normalized.title(), KNOWN_COUNTRIES, n=1, cutoff=0.8)
+    if candidates:
+        return candidates[0]
+
+    # If the text equals a known city term (not exact key), try contains-based city mapping
+    for city_key, mapped_country in CITY_TO_COUNTRY.items():
+        if city_key in text_normalized:
+            return mapped_country
+
+    return ''
+
+def clean_country_name(country):
+    """Clean and normalize country names, handling city-country combinations and common typos."""
+    if pd.isna(country) or country == '':
+        return ''
+
+    normalized = _normalize_location_string(country)
+    if not normalized:
+        return ''
+
+    if normalized in NON_COUNTRY_BLACKLIST_EXACT:
+        return ''
+    if any(bad in normalized for bad in NON_COUNTRY_BLACKLIST_SUBSTR):
+        return ''
+
+    best = _best_country_match(normalized)
+    if best:
+        return best
+
+    # If nothing matched, return title-cased last token if it looks like a country-ish term (1-3 words)
+    tokens = normalized.split()
+    if 1 <= len(tokens) <= 3 and len(normalized) <= 30:
+        fallback = ' '.join(tokens).title()
+        # Guard against obvious non-countries like email fragments or generic words
+        if not any(bad in normalized for bad in ['@', 'job', 'career', 'skill', 'network', 'opportunity', 'thanks', 'gmail', 'mail']):
+            return fallback
+    return ''
+
+def _parse_timestamp(ts_val: Any) -> datetime:
+    if pd.isna(ts_val):
+        return datetime.min
+    s = str(ts_val).strip()
+    # Try multiple common formats
+    for fmt in ("%m/%d/%Y %H:%M:%S", "%m/%d/%Y %H:%M", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+        try:
+            return datetime.strptime(s, fmt)
+        except Exception:
+            continue
+    # Fallback: pandas to_datetime
+    try:
+        return pd.to_datetime(s, errors='coerce') or datetime.min
+    except Exception:
+        return datetime.min
+
+def deduplicate_by_email(df: pd.DataFrame) -> pd.DataFrame:
+    """Deduplicate responses by email, keeping the latest Timestamp per email (case-insensitive)."""
+    email_cols = [col for col in df.columns if 'email' in col.lower()]
+    ts_cols = [col for col in df.columns if 'timestamp' in col.lower()]
+    if not email_cols or not ts_cols:
+        return df
+
+    email_col = email_cols[0]
+    ts_col = ts_cols[0]
+
+    df['_email_norm'] = df[email_col].astype(str).str.strip().str.lower()
+    df['_ts_parsed'] = df[ts_col].apply(_parse_timestamp)
+
+    # Separate rows with valid emails and the rest
+    with_email = df[df['_email_norm'].fillna('') != '']
+    without_email = df[df['_email_norm'].fillna('') == '']
+
+    if with_email.empty:
+        df = df.drop(columns=['_email_norm', '_ts_parsed'], errors='ignore')
+        return df
+
+    idx = with_email.groupby('_email_norm')['_ts_parsed'].idxmax()
+    deduped = with_email.loc[idx]
+
+    result = pd.concat([deduped, without_email], ignore_index=True)
+    result = result.drop(columns=['_email_norm', '_ts_parsed'], errors='ignore')
+    return result
+
 def analyze_sentiment(text):
     """
-    Simple sentiment analysis based on keyword matching.
+    Heuristic sentiment analysis with negation handling and common phrases.
     Returns: 'positive', 'negative', or 'neutral'
     """
     if not text:
         return 'neutral'
     
-    text_lower = text.lower()
+    text_lower = str(text).lower()
     
     # Positive indicators
     positive_words = [
@@ -37,9 +262,10 @@ def analyze_sentiment(text):
     # Negative indicators
     negative_words = [
         'hate', 'terrible', 'awful', 'horrible', 'bad', 'poor', 'disappointing', 'frustrated', 
-        'annoying', 'difficult', 'hard', 'confusing', 'slow', 'laggy', 'broken', 'issue', 'problem',
-        'bug', 'error', 'fail', 'failure', 'crash', 'freeze', 'stuck', 'impossible', 'useless',
-        'waste', 'boring', 'unhappy', 'dissatisfied', 'concerned', 'worry', 'unfortunately', 'sadly'
+        'annoying', 'difficult', 'hard', 'confusing', 'slow', 'lag', 'laggy', 'broken', 'issue', 'problem',
+        'bug', 'error', 'fail', 'failure', 'crash', 'crashing', 'freeze', 'freezes', 'freezing', 'stuck',
+        'impossible', 'useless', 'waste', 'boring', 'unhappy', 'dissatisfied', 'concerned', 'worry', 'unfortunately', 'sadly',
+        'unresponsive'
     ]
     
     # Improvement/request words (usually neutral to positive)
@@ -48,20 +274,33 @@ def analyze_sentiment(text):
         'wish', 'could', 'should', 'need', 'want', 'feature', 'add', 'include', 'provide'
     ]
     
-    # Count occurrences
+    # Negation or problem phrase patterns that indicate negative sentiment
+    negative_patterns = [
+        'not good', 'not great', 'not helpful', 'not useful', 'no value', 'no good',
+        "don't like", 'do not like', "doesn't work", "doesnt work", "can't", 'cant ', 'cannot ',
+        'hard to', 'difficult to', 'too slow', 'very slow', 'so slow', 'keeps crashing', 'keeps crushing'
+    ]
+
     positive_count = sum(1 for word in positive_words if word in text_lower)
     negative_count = sum(1 for word in negative_words if word in text_lower)
     improvement_count = sum(1 for word in improvement_words if word in text_lower)
-    
-    # Determine sentiment
-    if positive_count > negative_count and positive_count > 0:
-        return 'positive'
-    elif negative_count > positive_count and negative_count > 0:
-        return 'negative'
-    elif improvement_count > 0:
-        return 'neutral'  # Suggestions/improvements are neutral
-    else:
+    negative_count += sum(1 for pat in negative_patterns if pat in text_lower)
+
+    # Mixed signal handling
+    if negative_count > 0 and positive_count > 0:
+        if negative_count - positive_count >= 1:
+            return 'negative'
+        if positive_count - negative_count >= 1:
+            return 'positive'
         return 'neutral'
+
+    if negative_count > 0:
+        return 'negative'
+    if positive_count > 0:
+        return 'positive'
+    if improvement_count > 0:
+        return 'neutral'
+    return 'neutral'
 
 def categorize_community_goals(responses):
     """Categorize responses about what members hope to gain."""
@@ -308,36 +547,67 @@ def categorize_suggestions(responses):
     
     return categories
 
-def process_survey_data(csv_file_path):
+def _require_column(df: pd.DataFrame, needle: str) -> str:
+    matches = [col for col in df.columns if needle in col]
+    if not matches:
+        raise ValueError(f"Required column containing '{needle}' not found. Available: {list(df.columns)}")
+    return matches[0]
+
+def _format_circle_ratings(series: pd.Series) -> Dict[str, int]:
+    counts = series.value_counts().sort_index()
+    formatted: Dict[str, int] = {}
+    for k, v in counts.items():
+        try:
+            key = f"{float(k):.1f}"
+        except Exception:
+            # If not numeric, keep as string
+            key = str(k)
+        formatted[key] = int(v)
+    return formatted
+
+def process_survey_data(csv_file_path, *, dedup: bool = True):
     """Main function to process the survey data."""
     print("Loading survey data...")
-    df = pd.read_csv(csv_file_path)
+    # Use proper CSV parsing with quote handling
+    df = pd.read_csv(csv_file_path, quotechar='"', skipinitialspace=True)
     
     # Clean column names
     df.columns = df.columns.str.strip()
     
+    # Deduplicate by email keeping latest timestamp when present (configurable)
+    if dedup:
+        df = deduplicate_by_email(df)
+    
     print(f"Total responses: {len(df)}")
     print(f"Columns: {list(df.columns)}")
     
-    # Find actual column names (handling potential trailing spaces)
-    country_col = [col for col in df.columns if 'What country are you based in' in col][0]
-    comm_pref_col = [col for col in df.columns if 'What is your preferred way to receive updates' in col][0]
-    circle_rating_col = [col for col in df.columns if 'How would you rate you experience of Circle' in col][0]
-    circle_feedback_col = [col for col in df.columns if 'Please share your reasoning behind your rating for Circle' in col][0]
-    goals_col = [col for col in df.columns if 'What are the top 1-3 things you hope to gain' in col][0]
-    events_col = [col for col in df.columns if 'To help us plan, what types of events' in col][0]
-    content_col = [col for col in df.columns if 'What kind of content / articles / resources' in col][0]
-    interest_col = [col for col in df.columns if 'If we were to create interest-based groups' in col][0]
-    contribution_col = [col for col in df.columns if 'How would you be interested in contributing' in col][0]
-    involve_col = [col for col in df.columns if 'Would you like us to inform you with specific ways' in col][0]
-    suggestions_col = [col for col in df.columns if 'Do you have any other comments, questions or suggestion' in col][0]
+    # Find actual column names (robust substring search)
+    country_col = _require_column(df, 'What country are you based in')
+    comm_pref_col = _require_column(df, 'What is your preferred way to receive updates')
+    circle_rating_col = _require_column(df, 'How would you rate you experience of Circle')
+    circle_feedback_col = _require_column(df, 'Please share your reasoning behind your rating for Circle')
+    goals_col = _require_column(df, 'What are the top 1-3 things you hope to gain')
+    events_col = _require_column(df, 'To help us plan, what types of events')
+    content_col = _require_column(df, 'What kind of content / articles / resources')
+    interest_col = _require_column(df, 'If we were to create interest-based groups')
+    contribution_col = _require_column(df, 'How would you be interested in contributing')
+    involve_col = _require_column(df, 'Would you like us to inform you with specific ways')
+    suggestions_col = _require_column(df, 'Do you have any other comments, questions or suggestion')
+    
+    # Clean and normalize country names
+    print("Cleaning country data...")
+    df[country_col] = df[country_col].apply(clean_country_name)
+    # Do NOT drop rows with missing country; include them in totals and bucket as 'Unknown' for country stats
+    country_series_for_stats = df[country_col].replace('', 'Unknown')
     
     # Basic statistics
+    # Coerce circle rating to numeric for consistency
+    df[circle_rating_col] = pd.to_numeric(df[circle_rating_col], errors='coerce')
     stats = {
         'total_responses': len(df),
-        'countries': df[country_col].value_counts().head(10).to_dict(),
+        'countries': country_series_for_stats.value_counts().to_dict(),
         'communication_preferences': df[comm_pref_col].value_counts().to_dict(),
-        'circle_ratings': df[circle_rating_col].value_counts().sort_index().to_dict()
+        'circle_ratings': _format_circle_ratings(df[circle_rating_col].dropna())
     }
     
     # Process value ratings for community aspects
@@ -427,7 +697,7 @@ def process_survey_data(csv_file_path):
     processed_data = {
         'stats': {
             'total_responses': stats['total_responses'],
-            'countries_count': len([c for c in stats['countries'].keys() if c and str(c).strip()]),
+            'countries_count': len(stats['countries']),  # Now showing actual clean country count
             'avg_circle_rating': round(avg_circle_rating, 1),
             'contribution_percentage': round(contribution_percentage)
         },
@@ -448,23 +718,38 @@ def process_survey_data(csv_file_path):
     
     return processed_data
 
+def write_js(data: Dict[str, Any], output_js_path: str = 'survey_data.js') -> None:
+    """Write processed data as a JS constant used by the dashboard."""
+    with open(output_js_path, 'w', encoding='utf-8') as f:
+        f.write('const surveyData = ')
+        json.dump(data, f, indent=2, ensure_ascii=False)
+        f.write(';' + "\n")
+
 if __name__ == "__main__":
-    csv_file = "Online_community_feedback.csv"
-    
+    import argparse
+    parser = argparse.ArgumentParser(description='Process ALX Online community survey CSV into JSON/JS for the dashboard.')
+    parser.add_argument('--csv', default='Online-community-feedback2.csv', help='Path to input CSV file')
+    parser.add_argument('--out-json', default='survey_data.json', help='Path to output JSON file')
+    parser.add_argument('--out-js', default='survey_data.js', help='Path to output JS file')
+    parser.add_argument('--no-dedup', action='store_true', help='Do not deduplicate by email; include all rows in totals')
+    args = parser.parse_args()
+
     try:
-        data = process_survey_data(csv_file)
+        data = process_survey_data(args.csv, dedup=(not args.no_dedup))
         
         # Save processed data as JSON
-        with open('survey_data.json', 'w', encoding='utf-8') as f:
+        with open(args.out_json, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         
+        # Save as JS for the report
+        write_js(data, args.out_js)
+
         print("\nProcessing complete!")
         print(f"Total responses processed: {data['stats']['total_responses']}")
         print(f"Countries represented: {data['stats']['countries_count']}")
         print(f"Average Circle rating: {data['stats']['avg_circle_rating']}")
         print(f"Want to contribute: {data['stats']['contribution_percentage']}%")
-        
-        print(f"\nData saved to 'survey_data.json'")
+        print(f"Data saved to '{args.out_json}' and '{args.out_js}'")
         
     except Exception as e:
         print(f"Error processing survey data: {e}")

@@ -1,127 +1,81 @@
 {
   "stats": {
-    "total_responses": 91,
-    "countries_count": 10,
-    "avg_circle_rating": 3.6,
-    "contribution_percentage": 86
+    "total_responses": 72,
+    "countries_count": 5,
+    "avg_circle_rating": 3.7,
+    "contribution_percentage": 90
   },
   "countries": {
-    "South Africa": 20,
-    "Egypt": 12,
-    "Nigeria": 12,
-    "Ghana ": 7,
-    "South Africa ": 7,
-    "Nigeria ": 6,
-    "Ghana": 6,
-    "Egypt ": 4,
-    "Kenya": 2,
-    "egypt": 2
+    "South Africa": 28,
+    "Egypt": 15,
+    "Nigeria": 15,
+    "Ghana": 10,
+    "Kenya": 3
   },
   "communication_preferences": {
-    "WhatsApp": 49,
-    "Email Newsletters": 35,
-    "The Circle Community Platform (member portal)": 4,
-    "Telegram": 1
+    "WhatsApp": 38,
+    "Email Newsletters": 31,
+    "The Circle Community Platform (member portal)": 3
   },
   "circle_ratings": {
-    "1.0": 5,
-    "2.0": 7,
-    "3.0": 27,
-    "4.0": 28,
-    "5.0": 21
+    "1.0": 3,
+    "2.0": 6,
+    "3.0": 22,
+    "4.0": 23,
+    "5.0": 18
   },
   "value_ratings": {
     "Online Events (e.g., webinars, workshops)": {
-      "5 = Extremely valuable": 39,
-      "3 = Moderately valuable": 23,
-      "4 = Very valuable": 22,
-      "2 = Slightly valuable": 5
+      "5 = Extremely valuable": 31,
+      "4 = Very valuable": 19,
+      "3 = Moderately valuable": 18,
+      "2 = Slightly valuable": 4
     },
     "In-person Events (e.g., meetups, networking sessions)": {
-      "5 = Extremely valuable": 40,
-      "4 = Very valuable": 21,
-      "3 = Moderately valuable": 15,
-      "2 = Slightly valuable": 8
+      "5 = Extremely valuable": 32,
+      "4 = Very valuable": 15,
+      "3 = Moderately valuable": 13,
+      "2 = Slightly valuable": 7
     },
     "The community platform (Circle)": {
-      "5 = Extremely valuable": 28,
-      "3 = Moderately valuable": 24,
-      "4 = Very valuable": 23,
-      "2 = Slightly valuable": 13
+      "5 = Extremely valuable": 22,
+      "3 = Moderately valuable": 20,
+      "4 = Very valuable": 18,
+      "2 = Slightly valuable": 11
     },
     "Networking opportunities with other members": {
-      "5 = Extremely valuable": 43,
-      "4 = Very valuable": 18,
-      "3 = Moderately valuable": 16,
-      "2 = Slightly valuable": 10
+      "5 = Extremely valuable": 35,
+      "4 = Very valuable": 14,
+      "3 = Moderately valuable": 14,
+      "2 = Slightly valuable": 8
     },
     "Content and resources shared with community": {
-      "5 = Extremely valuable": 44,
-      "4 = Very valuable": 21,
-      "3 = Moderately valuable": 12,
-      "2 = Slightly valuable": 11
+      "5 = Extremely valuable": 35,
+      "4 = Very valuable": 18,
+      "3 = Moderately valuable": 9,
+      "2 = Slightly valuable": 9
     }
   },
   "event_preferences": {
-    "Skill-building Workshops": 75,
-    "Career Development": 78,
-    "Expert Q&A": 37,
-    "Local Meetups": 48,
-    "Presentations": 32,
-    "Social Hangouts": 40
+    "Skill-building Workshops": 64,
+    "Career Development": 66,
+    "Local Meetups": 38,
+    "Social Hangouts": 34,
+    "Presentations": 27,
+    "Expert Q&A": 30
   },
   "contribution_preferences": {
-    "Mentoring": 45,
-    "Event Hosting": 43,
-    "Moderating": 40,
-    "Content Sharing": 49,
-    "Not Ready Yet": 16
+    "Mentoring": 40,
+    "Event Hosting": 37,
+    "Not Ready Yet": 12,
+    "Content Sharing": 39,
+    "Moderating": 36
   },
   "categorized_responses": {
     "community_goals": {
       "Career Development & Job Opportunities": [
         {
-          "text": "Learning\nCareer Growth\nNetworking ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Network, collaborate and opportunity ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Network, Opportunity and learning new things.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I hope to improve my communication skills and get experience to help me in my career.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Learn, connect & jobs ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "\n\t1.\tNetworking and mentorship – Connecting with like-minded peers and experienced professionals for guidance and growth.\n\t2.\tCareer opportunities – Access to job leads, internships, and referrals within the tech ecosystem.\n\t3.\tContinuous learning – Staying updated on tech trends, events, and resources that support personal and professional development",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Get a job >1500 dollar per month",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Job, community engagement and skill development ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "To build meaningful connections, gain real word experience, get remote jobs and to be recognized with my community. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Skills, networking, job",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Job Opportunities \nNetworking and Making Connections in the Tech World and Beyond",
           "sentiment": "neutral"
         },
         {
@@ -133,6 +87,70 @@
           "sentiment": "neutral"
         },
         {
+          "text": "Learn, connect & jobs ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Employable skills \nJob opportunities \nGet connected to life changing personalities ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Job, mentorship and Support.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Job opportunities in the health sector",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "To build meaningful connections, gain real word experience, get remote jobs and to be recognized with my community. ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career opportunities, upskill, and growth ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Build genuine connections, learn new skills (especially in tech) and start building my business and career. ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Network, collaborate and opportunity ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Strong Connections, Jobs, New training ( more program selection ) ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Learning\nCareer Growth\nNetworking ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I hope to improve my communication skills and get experience to help me in my career.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Get a job >1500 dollar per month",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "To make connections, get maybe business plugs and employment plugs",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "\n\t1.\tNetworking and mentorship – Connecting with like-minded peers and experienced professionals for guidance and growth.\n\t2.\tCareer opportunities – Access to job leads, internships, and referrals within the tech ecosystem.\n\t3.\tContinuous learning – Staying updated on tech trends, events, and resources that support personal and professional development",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Build my professional network to find career opportunities, continue learning new data science skills, create a hackathon community, and find peer support from others with shared experiences.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Job Opportunities \nNetworking and Making Connections in the Tech World and Beyond",
+          "sentiment": "neutral"
+        },
+        {
           "text": "Job opportunities \nNetworking\nUpskilling",
           "sentiment": "neutral"
         },
@@ -141,39 +159,7 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Build my professional network to find career opportunities, continue learning new data science skills, create a hackathon community, and find peer support from others with shared experiences.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Build genuine connections, learn new skills (especially in tech) and start building my business and career. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Employable skills \nJob opportunities \nGet connected to life changing personalities ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career opportunities, upskill, and growth ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Job, mentorship and Support.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Networking, Job offer",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Job opportunities in the health sector",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Job placement support ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "To make connections, get maybe business plugs and employment plugs",
+          "text": "Job, community engagement and skill development ",
           "sentiment": "neutral"
         },
         {
@@ -181,29 +167,17 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Strong Connections, Jobs, New training ( more program selection ) ",
+          "text": "Job placement support ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Skills, networking, job",
           "sentiment": "neutral"
         }
       ],
       "Networking & Community Building": [
         {
-          "text": "Technical Skills - Soft Skills - Network",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Self Development, Networking, Communication Skills ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Networking , opportunities and learning ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "internships,skill development,networking",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "-Access to the hubs  -networking - activities on hubs to exchange knowledge through challenges and small compilations also you may arrange trips ",
+          "text": "Networking, Networking, get latest trends in technology.",
           "sentiment": "neutral"
         },
         {
@@ -211,15 +185,87 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Network\nOpportunities\n1:1 sessions",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Networking and guidance on how to keep breaking boundaries in my usage of AI ",
           "sentiment": "neutral"
         },
         {
+          "text": "Networking \nCreate friend's \nLearning ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "1. Valuable knowledge \n2. Great network \n3. Opportunities ",
+          "sentiment": "positive"
+        },
+        {
+          "text": "Growth, and connections",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Networking ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Self Development, Networking, Communication Skills ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "-Access to the hubs  -networking - activities on hubs to exchange knowledge through challenges and small compilations also you may arrange trips ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Network\nOpportunities\n1:1 sessions",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Access to a Pan African Network, Skill building and mentorship, and opportunities and exposure",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Connecting with like-minded young individuals like myself",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Connection, Exposure, Skills and Knowledge ",
+          "sentiment": "neutral"
+        },
+        {
           "text": "I hope to help others and make new connections.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Knowledge, friendship, ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Networking , opportunities and learning ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Networking, first pick at opportunities, regular meet and greats ",
+          "sentiment": "positive"
+        },
+        {
+          "text": "internships,skill development,networking",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Learn, Community and opportunities ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Connecting, constant updates, giving back to the community 🙏🏻",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Opportunities, networking",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Knowledge(Information, practical and theoretical), Network & Community",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "1. Community \n2. Exposure \n3. Friends/Business partners ",
           "sentiment": "neutral"
         },
         {
@@ -231,71 +277,7 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Connecting, constant updates, giving back to the community 🙏🏻",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Networking ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Knowledge, friendship, ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "1. Community \n2. Exposure \n3. Friends/Business partners ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Growth, and connections",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Knowledge(Information, practical and theoretical), Network & Community",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Opportunities, networking",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Connection, Exposure, Skills and Knowledge ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Learn, Community and opportunities ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Connecting with like-minded young individuals like myself",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Networking, Networking, get latest trends in technology.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "1. create community 2. practice my skills with the community 3. learning webinars ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Networking, first pick at opportunities, regular meet and greats ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Gain opportunities, network more and continue to benefit from using the space",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "1. Valuable knowledge \n2. Great network \n3. Opportunities ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Access to a Pan African Network, Skill building and mentorship, and opportunities and exposure",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Networking \nCreate friend's \nLearning ",
+          "text": "Technical Skills - Soft Skills - Network",
           "sentiment": "neutral"
         }
       ],
@@ -305,19 +287,7 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Gain practical knowldge and keep deepen my skills. and continues learning",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Development, skills improving, continuous learning",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Scholarship\nA place where I belong\nKnowledge",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Helping others, learned how to organize any type of events, and got to know a handful kind people",
           "sentiment": "neutral"
         },
         {
@@ -325,23 +295,27 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Training after i obtain my certification ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Leadership skills, Impact-Oriented skills, and a great learning experience ",
           "sentiment": "positive"
-        },
-        {
-          "text": "Knowledge \nSkills\nCourage",
-          "sentiment": "neutral"
         },
         {
           "text": "I want to improve my skills.\nI want to get More knowledge on creating things.",
           "sentiment": "neutral"
         },
         {
+          "text": "Scholarship\nA place where I belong\nKnowledge",
+          "sentiment": "neutral"
+        },
+        {
           "text": "Continuously enhancement of my skills especially in digital marketing ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Helping others, learned how to organize any type of events, and got to know a handful kind people",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Training after i obtain my certification ",
           "sentiment": "neutral"
         },
         {
@@ -353,19 +327,7 @@
       "Mentorship & Guidance": [],
       "Other": [
         {
-          "text": "More visibility, game activities ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Everything I can get... I'm tired really 😴 ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I wish to receive and provide insights of value that contribute to the growth and prosperity of the collective consciousness that is us humans. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I found my tribe, was able to work with people and also found a potential client.",
+          "text": "More qualifications but l am over 35",
           "sentiment": "neutral"
         },
         {
@@ -373,7 +335,11 @@
           "sentiment": "neutral"
         },
         {
-          "text": "More qualifications but l am over 35",
+          "text": "I found my tribe, was able to work with people and also found a potential client.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I wish to receive and provide insights of value that contribute to the growth and prosperity of the collective consciousness that is us humans. ",
           "sentiment": "neutral"
         }
       ]
@@ -381,31 +347,7 @@
     "circle_feedback": {
       "Positive User Experience": [
         {
-          "text": "The last time I used it was a while ago since the last program I studied, but it was good at communicating with the rest of the members and sharing ideas.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "easy to use",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Community platform has been a wonderful place and it has helped me connect with new friends ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "It's easy to navigate and having to have its mobile app version, it gets me to be fully connected ",
-          "sentiment": "positive"
-        },
-        {
           "text": "It's easy and nice ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Circle is great, but it causes me a little bit of confusion",
-          "sentiment": "positive"
-        },
-        {
-          "text": "It's helpful and easy to access",
           "sentiment": "positive"
         },
         {
@@ -413,31 +355,7 @@
           "sentiment": "positive"
         },
         {
-          "text": "I rated Circle 4 stars because it’s a clean, user-friendly platform that makes it easy to engage with the community. However, there’s room for improvement in areas like mobile performance, search functionality, and onboarding for new users. With these enhancements, the experience could be even better.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Because I find it difficult to track my engagements, and most people take forever to respond on circle. Whatsapp is faster but I believe it is also the reason circle is not ustilised sufficiently. Circle is great because of the higher volumes and I would love to use it more but most of my ALX interactions now are on my Whatsapp but I believe circle can be even greater I just dont know how yet.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "There is too much going on all at once, more focused updates as and when they come would be great but I get why it is as it is ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "I rated Circle 1-star because I forget it exists. We already use WhatsApp and email, making the platform redundant and easy to ignore.",
-          "sentiment": "positive"
-        },
-        {
-          "text": " It is convenient and easy to navigate.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Not very helpful to alumni that are actively seeking employment.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "I gave this rating because the platform is amazing but what i would like is the lingering software enginerring course that i started not sure if it was 2022 or 2023 i did not complete but its still there, if maybe you can have the ability to remove an inactive course or if it could automatically fall away after maybe 3 or 6 months of inactivity that would be great.",
+          "text": "It's easy to navigate and having to have its mobile app version, it gets me to be fully connected ",
           "sentiment": "positive"
         },
         {
@@ -445,12 +363,64 @@
           "sentiment": "positive"
         },
         {
+          "text": "The last time I used it was a while ago since the last program I studied, but it was good at communicating with the rest of the members and sharing ideas.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "It's helpful and easy to access",
+          "sentiment": "positive"
+        },
+        {
+          "text": "It is convenient and easy to navigate.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "I gave this rating because the platform is amazing but what i would like is the lingering software enginerring course that i started not sure if it was 2022 or 2023 i did not complete but its still there, if maybe you can have the ability to remove an inactive course or if it could automatically fall away after maybe 3 or 6 months of inactivity that would be great.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "I rated Circle 4 stars because it’s a clean, user-friendly platform that makes it easy to engage with the community. However, there’s room for improvement in areas like mobile performance, search functionality, and onboarding for new users. With these enhancements, the experience could be even better.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "I rated Circle 1-star because I forget it exists. We already use WhatsApp and email, making the platform redundant and easy to ignore.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "Because I find it difficult to track my engagements, and most people take forever to respond on circle. Whatsapp is faster but I believe it is also the reason circle is not ustilised sufficiently. Circle is great because of the higher volumes and I would love to use it more but most of my ALX interactions now are on my Whatsapp but I believe circle can be even greater I just dont know how yet.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "easy to use",
+          "sentiment": "positive"
+        },
+        {
+          "text": "There is too much going on all at once, more focused updates as and when they come would be great but I get why it is as it is ",
+          "sentiment": "positive"
+        },
+        {
           "text": "I haven’t been using it much, but from the little time I have, it’s easy to navigate and simple to use. The only issue is that it floods my email with notifications from co-users/peers which is defaul making it had to identify most important emails.",
           "sentiment": "neutral"
+        },
+        {
+          "text": "Not very helpful to alumni that are actively seeking employment.",
+          "sentiment": "positive"
         }
       ],
       "Performance Issues": [],
       "Content Organization": [
+        {
+          "text": "One platform for all the latet information and event. Bringing all learner together.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Very organized app ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Getting information from them ",
+          "sentiment": "neutral"
+        },
         {
           "text": "The plate form  has many posts not related to each others ",
           "sentiment": "neutral"
@@ -460,61 +430,37 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Its not fun and I can recieve full information by email without circle ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "One platform for all the latet information and event. Bringing all learner together.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Getting information from them ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Very organized app ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "It has all information needed",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Its not fun and I can recieve full information by email without circle ",
           "sentiment": "neutral"
         }
       ],
       "Navigation & Usability": [
         {
-          "text": "I find it inspiring when I see others contributing ",
-          "sentiment": "positive"
-        },
-        {
           "text": "It's simple to navigate and a very safe space",
           "sentiment": "neutral"
+        },
+        {
+          "text": "I find it inspiring when I see others contributing ",
+          "sentiment": "positive"
         }
       ],
       "Feature Requests": [
         {
-          "text": "I give it a rating of 3, as I prefer the UI and feel of the Web address over mobile.",
+          "text": "I can connect with different people even after finishing the program i enrolled for.When i need help someone is always there to help",
           "sentiment": "neutral"
         },
         {
-          "text": "I can connect with different people even after finishing the program i enrolled for.When i need help someone is always there to help",
+          "text": "I give it a rating of 3, as I prefer the UI and feel of the Web address over mobile.",
           "sentiment": "neutral"
         }
       ],
       "Other": [
         {
-          "text": "I don't use it",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Not using it ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Everything works fine",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I did not know anything about Circle",
           "sentiment": "neutral"
         },
         {
@@ -522,71 +468,7 @@
           "sentiment": "neutral"
         },
         {
-          "text": "I don't use Circle for now.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I have not fully participate in Circle ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "It’s fair ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I do not use it always",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Very supportive and reliable",
-          "sentiment": "positive"
-        },
-        {
-          "text": "I hardly use it",
-          "sentiment": "negative"
-        },
-        {
-          "text": "It encourage me and motivate me more",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Get students and alimin engaged ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Helps me grow",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "The community is so interactive and engaging ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I am not very active.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "It's easily accessible",
-          "sentiment": "positive"
-        },
-        {
-          "text": "It's conjested",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I am not part of \"the circle\" yet",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I get a lot of help on the platform",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Because I have had my fair of experience with it so I highly recommende it",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I never really login and check updates, it's forgettable ",
+          "text": "I did not know anything about Circle",
           "sentiment": "neutral"
         },
         {
@@ -598,35 +480,63 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Ease of communication. ",
+          "text": "I have not fully participate in Circle ",
           "sentiment": "neutral"
-        },
-        {
-          "text": "Very limited when using phone ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I hardly log in",
-          "sentiment": "negative"
         },
         {
           "text": "Happy with the help tbat l get everytime",
           "sentiment": "positive"
         },
         {
+          "text": "I don't engage it much",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "The community is so interactive and engaging ",
+          "sentiment": "neutral"
+        },
+        {
           "text": "The platform has helped me, right now I'm part of the Beyond Borders Program working with YES4YOUTH and Afrika Tikkun Services ",
           "sentiment": "neutral"
         },
         {
-          "text": "Don't visit Circle often. ",
+          "text": "Ease of communication. ",
           "sentiment": "neutral"
         },
         {
-          "text": "Don't access it frequently ",
+          "text": "I do not use it always",
           "sentiment": "neutral"
         },
         {
-          "text": "I don't engage it much",
+          "text": "Everything works fine",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Experting more since we were brought into the Ecosystem on demand. Flash back when joining the program “those lacking the financial constraint” Thanks ",
+          "sentiment": "positive"
+        },
+        {
+          "text": "Helps me grow",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "It’s fair ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "It's conjested",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "It encourage me and motivate me more",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I am not part of \"the circle\" yet",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I don't use Circle for now.",
           "sentiment": "neutral"
         },
         {
@@ -634,19 +544,47 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Experting more since we were brought into the Ecosystem on demand. Flash back when joining the program “those lacking the financial constraint” Thanks ",
+          "text": "Very supportive and reliable",
           "sentiment": "positive"
+        },
+        {
+          "text": "I am not very active.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Because I have had my fair of experience with it so I highly recommende it",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I never really login and check updates, it's forgettable ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Very limited when using phone ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Get students and alimin engaged ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I hardly use it",
+          "sentiment": "negative"
+        },
+        {
+          "text": "It's easily accessible",
+          "sentiment": "positive"
+        },
+        {
+          "text": "I don't use it",
+          "sentiment": "neutral"
         }
       ]
     },
     "content_preferences": {
       "Career Tips & Opportunities": [
         {
-          "text": "Career tips , skills ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "career tips",
+          "text": "Career tips",
           "sentiment": "neutral"
         },
         {
@@ -654,39 +592,7 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Career development, more virtual opportunities ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips, How to skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "More directions on career pathways and opportunities in Tech ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "CV building, interview prep, personal branding, and networking strategies",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Career tips",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips and How to Skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career Tips, career help.... Just help us please ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips, how to skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips how to skill up",
           "sentiment": "neutral"
         },
         {
@@ -695,70 +601,6 @@
         },
         {
           "text": "Career tips",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I’d like to see content on career tips, practical “how-to” skill guides, inspiring stories from African leaders, and opportunities for collaboration through project showcases and study groups.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Career Tips",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips and motives",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips, How to Skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "How to build a brand that is recognized and how to get remote jobs. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips and How to Skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips, Personalised mentorship from Alumi's for current enrolled students.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "How to skills, career development ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "career tips",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips, freelance opportunities, how to skills that can generate passive income ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": " Career tips",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips, how to skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips\nHow to skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Job opportunities Portal where unemployed candidates can search for jobs and apply ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Career tips ",
           "sentiment": "neutral"
         },
         {
@@ -770,19 +612,59 @@
           "sentiment": "neutral"
         },
         {
+          "text": "Career tips, how to skills",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "More directions on career pathways and opportunities in Tech ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "How to build a brand that is recognized and how to get remote jobs. ",
+          "sentiment": "neutral"
+        },
+        {
           "text": "Career tips and How to Skills ",
           "sentiment": "neutral"
         },
         {
-          "text": "career tips, do it yourself hints",
+          "text": "How to skills, Career tips,  leveraging  skills",
           "sentiment": "neutral"
         },
         {
-          "text": "Career tips",
+          "text": "Career tips, Personalised mentorship from Alumi's for current enrolled students.",
           "sentiment": "neutral"
         },
         {
-          "text": "Career tips, how to skills, Technology Articles ",
+          "text": "Career tips, How to Skills",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips, How to skills",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips , skills ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips and How to Skills",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career Tips",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career development, more virtual opportunities ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "How to skills, career development ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips and motives",
           "sentiment": "neutral"
         },
         {
@@ -790,7 +672,31 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Career tips, how to apply for jobs as an ALX alumni, which jobs would be more suitable for ALX alumni.",
+          "text": "Career tips",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I’d like to see content on career tips, practical “how-to” skill guides, inspiring stories from African leaders, and opportunities for collaboration through project showcases and study groups.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "Career tips, freelance opportunities, how to skills that can generate passive income ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips\nHow to skills",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Job opportunities Portal where unemployed candidates can search for jobs and apply ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "career tips",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips, how to skills",
           "sentiment": "neutral"
         },
         {
@@ -798,21 +704,49 @@
           "sentiment": "neutral"
         },
         {
-          "text": "How to skills, Career tips,  leveraging  skills",
+          "text": "Career tips, how to apply for jobs as an ALX alumni, which jobs would be more suitable for ALX alumni.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips and How to Skills",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "career tips, do it yourself hints",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Career tips how to skill up",
           "sentiment": "neutral"
         }
       ],
       "Technical Skills & AI Content": [
         {
+          "text": "Latest research articles on tech related information especially artificial intelligence ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Hackathons and community on best free AI tools ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Skill-building workshops (e.g., coding, marketing, leadership)",
+          "sentiment": "neutral"
+        },
+        {
           "text": "News about the top companies in tech field and updates about the community members and their fresh achievements \nAlso the trendy news analysis and its impact on the tech industry ",
           "sentiment": "neutral"
         },
         {
-          "text": "I would like to see a valuable resources, so we keep our hands on real projects and learning new technologies.",
-          "sentiment": "positive"
+          "text": "I would like to see more Hub activity blog posts eg pictures of the Hiking teams hike, the cooking club while they are cooking and sitting up at the hub the tech team running coding and robotics and anime events etc ",
+          "sentiment": "neutral"
         },
         {
-          "text": "Skill-building workshops (e.g., coding, marketing, leadership)",
+          "text": "Anything relevant, it doesn't have to be about Africans but it must be relevant for us African tech students and future leaders.",
           "sentiment": "neutral"
         },
         {
@@ -821,22 +755,6 @@
         },
         {
           "text": "Tech startups",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Hackathons and community on best free AI tools ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Anything relevant, it doesn't have to be about Africans but it must be relevant for us African tech students and future leaders.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I would like to see more Hub activity blog posts eg pictures of the Hiking teams hike, the cooking club while they are cooking and sitting up at the hub the tech team running coding and robotics and anime events etc ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Latest research articles on tech related information especially artificial intelligence ",
           "sentiment": "neutral"
         }
       ],
@@ -855,10 +773,6 @@
       ],
       "Other": [
         {
-          "text": "Al of the above ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "All",
           "sentiment": "neutral"
         },
@@ -867,31 +781,7 @@
           "sentiment": "positive"
         },
         {
-          "text": "Digital skills",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "As long as its carries knowledge and transformation impact ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Skills - Anything to do with improvements.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "SKILLS",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Interactive how to videos…complex but yea",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Project Management since it’s dominating the scenes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "All of the above .",
+          "text": "How to skills.",
           "sentiment": "neutral"
         },
         {
@@ -903,6 +793,14 @@
           "sentiment": "neutral"
         },
         {
+          "text": "All of the above .",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Anything valuable. So far, the articles shared are really insightful ",
+          "sentiment": "positive"
+        },
+        {
           "text": "How to skills ",
           "sentiment": "neutral"
         },
@@ -911,15 +809,23 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Anything valuable. So far, the articles shared are really insightful ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "How to skills.",
+          "text": "As long as its carries knowledge and transformation impact ",
           "sentiment": "neutral"
         },
         {
-          "text": "How to Skills",
+          "text": "Skills - Anything to do with improvements.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Project Management since it’s dominating the scenes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Interactive how to videos…complex but yea",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "SKILLS",
           "sentiment": "neutral"
         }
       ]
@@ -927,67 +833,11 @@
     "interest_groups": {
       "Developer & Tech Groups": [
         {
-          "text": "Backend Developers, Presentation Skills Group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Software engineering/ developer group ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Developer group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Developer group ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Developer group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Developer group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Developers",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I’d be most interested in joining groups like:\n\t1.\tCloud Computing / DevOps Group – To deepen my AWS knowledge and connect with others in the cloud space.\n\t2.\tDeveloper Group – For coding discussions, project collaboration, and peer learning.\n\t3.\tTech for Social Impact / Education Group – To explore how technology can drive positive change, especially in education and community development",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Software Team",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Developer group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Developer group, DevOps group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Web3, AI tools, AgriTech",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Data groups (AI & ML included)  and Developer groups ",
           "sentiment": "neutral"
         },
         {
           "text": "Developer groups ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "A hackathon developer group in collaboration with other communities ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes, especially developer group ",
           "sentiment": "neutral"
         },
         {
@@ -999,21 +849,65 @@
           "sentiment": "neutral"
         },
         {
+          "text": "Web3, AI tools, AgriTech",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes, especially developer group ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Developer group ",
+          "sentiment": "neutral"
+        },
+        {
           "text": "Developer ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Data groups (AI & ML included)  and Developer groups ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Developer group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Software engineering/ developer group ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Software Team",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I’d be most interested in joining groups like:\n\t1.\tCloud Computing / DevOps Group – To deepen my AWS knowledge and connect with others in the cloud space.\n\t2.\tDeveloper Group – For coding discussions, project collaboration, and peer learning.\n\t3.\tTech for Social Impact / Education Group – To explore how technology can drive positive change, especially in education and community development",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "A hackathon developer group in collaboration with other communities ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Developer group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Developers",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Developer group, DevOps group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Backend Developers, Presentation Skills Group",
           "sentiment": "neutral"
         }
       ],
       "Data Science & Analytics": [
         {
           "text": "Data analytics ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Data & Analytics group (data science, visualization, business intelligence).",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Data",
           "sentiment": "neutral"
         },
         {
@@ -1037,11 +931,11 @@
       ],
       "Business & Finance": [
         {
-          "text": "Yes please, especially SEO group as a digital marketing branch you barely talk about.",
+          "text": "Digital Marketing ",
           "sentiment": "neutral"
         },
         {
-          "text": "Digital Marketing ",
+          "text": "Yes please, especially SEO group as a digital marketing branch you barely talk about.",
           "sentiment": "neutral"
         }
       ],
@@ -1051,37 +945,17 @@
           "sentiment": "positive"
         },
         {
-          "text": "group of creatives",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Recruitment linking group ",
           "sentiment": "neutral"
         }
       ],
       "Other": [
         {
-          "text": "PO/BA group",
+          "text": "yes",
           "sentiment": "neutral"
         },
         {
-          "text": "Project management ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes i will gladly do so",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes, I would happily join. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
+          "text": "Any Health Related Group ",
           "sentiment": "neutral"
         },
         {
@@ -1089,19 +963,47 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Yes, of course ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes.... ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Very interested",
+          "text": "Yes",
           "sentiment": "neutral"
         },
         {
           "text": "Administrative Assistant Group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes, I would happily join. ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes 💯",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes definitely ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Maybe",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "All of the mentioned examples ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I think there should be a group for people who are still figuring it out. Some of us would like to explore and find out what our interests are and the things we're most passionate about. ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes",
           "sentiment": "neutral"
         },
         {
@@ -1113,7 +1015,11 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Outreach group, Games group",
+          "text": "Yes, of course ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Project management ",
           "sentiment": "neutral"
         },
         {
@@ -1121,99 +1027,7 @@
           "sentiment": "neutral"
         },
         {
-          "text": "GKSS-ALX, ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes definitely ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Definitely ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Environmental Group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I would be interested ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Yes ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Environmental Groups",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Environmental group",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Any Health Related Group ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "All of the mentioned examples ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Maybe",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "YES",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I think there should be a group for people who are still figuring it out. Some of us would like to explore and find out what our interests are and the things we're most passionate about. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Environmental, community development ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Yes",
           "sentiment": "neutral"
         },
         {
@@ -1229,11 +1043,67 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Yes 💯",
+          "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Definitely ",
           "sentiment": "neutral"
         },
         {
           "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Environmental Groups",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "PO/BA group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Environmental group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "GKSS-ALX, ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I would be interested ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Outreach group, Games group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Environmental Group",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Yes",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "YES",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Very interested",
           "sentiment": "neutral"
         }
       ]
@@ -1241,7 +1111,7 @@
     "suggestions": {
       "Platform & Technical Improvements": [
         {
-          "text": "I would like alx to go deep in technical side.",
+          "text": "Communication improvement ",
           "sentiment": "neutral"
         },
         {
@@ -1249,15 +1119,19 @@
           "sentiment": "positive"
         },
         {
-          "text": "Communication improvement ",
-          "sentiment": "neutral"
-        },
-        {
           "text": "This may not fall under the community survey, but I believe it would be great if we could use our legacy points to pay for platform access instead of the $5 fee.",
           "sentiment": "positive"
         }
       ],
       "Community Structure & Organization": [
+        {
+          "text": "Please consider environmental groups, climate change is here and is affecting not only the environment but the future. ",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "I love this amazing community and It's honour for me to join you one day.",
+          "sentiment": "positive"
+        },
         {
           "text": "structured mentorship program of 12  one to one sessions based on matching process between mentors and mentees \n\nContent creation/ development projects with help of community experts \n\nEntertainment activities integrated with skills development also\n\nAnnounce about the availability scholarships/global events in tech field \n\nThank you ",
           "sentiment": "positive"
@@ -1267,27 +1141,11 @@
           "sentiment": "positive"
         },
         {
-          "text": "I love this amazing community and It's honour for me to join you one day.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Please bring back Portharcourt Hub .\nPlease \nGive access to people who did the course previously.  Start a hands on internship training for virtual assistant graduates . Please. Make Portharcourt lively .... add new community leaders Please ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Looking forward to grow the community ",
-          "sentiment": "neutral"
-        },
-        {
           "text": " I'd like to see more formalized opportunities for networking beyond general discussion forums. This could include a directory of members, a mentorship program that connects students with alumni, or virtual \"meet-ups\" organized by specific fields of interest.",
           "sentiment": "neutral"
         },
         {
-          "text": "Please consider environmental groups, climate change is here and is affecting not only the environment but the future. ",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Community Hubs within Kumasi ",
+          "text": "Looking forward to grow the community ",
           "sentiment": "neutral"
         }
       ],
@@ -1303,12 +1161,12 @@
       ],
       "Mentorship & Support": [
         {
-          "text": "Maybe we can be made aware of the challenges that Alx is facing internally so that we cam help with addressing them. Things like drop out rate, engagement rate and so on.",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Anyone working with ALX at the Hub whether volunteering or on salary should do so with passion and a strong sense of customer care. ALX means a lot to alumni who come to the Hub, and it’s discouraging when they encounter people with negative energy.\n\nIf you find yourself bringing negativity to the Hub, then you’re in the wrong place. What we need here is positivity, love, and support.\n\nSorry if this sounds a bit strong, but it comes from my own experience over the past few days at the Hub.",
           "sentiment": "positive"
+        },
+        {
+          "text": "Maybe we can be made aware of the challenges that Alx is facing internally so that we cam help with addressing them. Things like drop out rate, engagement rate and so on.",
+          "sentiment": "neutral"
         }
       ],
       "Content & Resources": [
@@ -1319,27 +1177,15 @@
       ],
       "Other": [
         {
-          "text": "Keep up the good work <3",
-          "sentiment": "positive"
-        },
-        {
-          "text": "..",
-          "sentiment": "neutral"
-        },
-        {
           "text": "No",
           "sentiment": "neutral"
         },
         {
-          "text": "All is well",
+          "text": "Not for now.",
           "sentiment": "neutral"
         },
         {
-          "text": "There is lot of noises at the hub especially close to the kitchen side. The noises reached the other side down to the reception side. The noises are way too much. Laughing, screaming and sort of distractions.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Not all. ",
+          "text": "No",
           "sentiment": "neutral"
         },
         {
@@ -1347,47 +1193,11 @@
           "sentiment": "neutral"
         },
         {
-          "text": "No",
+          "text": "Not all. ",
           "sentiment": "neutral"
         },
         {
-          "text": "Nope, just well done",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "No, Thanks",
-          "sentiment": "positive"
-        },
-        {
-          "text": "Please open the hubs that was closed.\nBikonu, Ejoor",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "No. I do not",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "The work you guys are doing is absolutely splendid, though I do agree, if there are plans to expand ALX, that hackathons and in-person events need to be more inclusive of people who are not in Gauteng, located close to the hub.",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "I am grateful for all you guys do.",
-          "sentiment": "positive"
-        },
-        {
-          "text": "I feel like there are no considerations for people who are employed going through the program, it feels like exclusion…more consideration without altering your objectives too much would be highly beneficial ",
-          "sentiment": "positive"
-        },
-        {
-          "text": "No",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "No",
-          "sentiment": "neutral"
-        },
-        {
-          "text": "Not for now.",
+          "text": "No i just like the experience am having at alx",
           "sentiment": "neutral"
         },
         {
@@ -1403,16 +1213,32 @@
           "sentiment": "neutral"
         },
         {
-          "text": "Thanks ",
+          "text": "How can I continue my study in alx program?",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Nope, just well done",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Needs more talks on skills up, most important some us lack how to showcase or write a portfolio, our personal resume and staff please come to rescue.\nThank you ",
           "sentiment": "positive"
         },
         {
-          "text": "None for now. ",
+          "text": "No. I do not",
           "sentiment": "neutral"
         },
         {
-          "text": "How can I continue my study in alx program?",
+          "text": "No",
           "sentiment": "neutral"
+        },
+        {
+          "text": "All is well",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "No, Thanks",
+          "sentiment": "positive"
         },
         {
           "text": "No",
@@ -1423,19 +1249,39 @@
           "sentiment": "neutral"
         },
         {
-          "text": "No",
-          "sentiment": "neutral"
-        },
-        {
           "text": "Only to keep up the good work.",
           "sentiment": "positive"
         },
         {
-          "text": "No i just like the experience am having at alx",
+          "text": "I am grateful for all you guys do.",
+          "sentiment": "positive"
+        },
+        {
+          "text": "No",
           "sentiment": "neutral"
         },
         {
-          "text": "Needs more talks on skills up, most important some us lack how to showcase or write a portfolio, our personal resume and staff please come to rescue.\nThank you ",
+          "text": "No",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Thanks ",
+          "sentiment": "positive"
+        },
+        {
+          "text": "I feel like there are no considerations for people who are employed going through the program, it feels like exclusion…more consideration without altering your objectives too much would be highly beneficial ",
+          "sentiment": "positive"
+        },
+        {
+          "text": "The work you guys are doing is absolutely splendid, though I do agree, if there are plans to expand ALX, that hackathons and in-person events need to be more inclusive of people who are not in Gauteng, located close to the hub.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Please open the hubs that was closed.\nBikonu, Ejoor",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Keep up the good work <3",
           "sentiment": "positive"
         }
       ]
