@@ -141,6 +141,26 @@
             margin: 2rem 0;
         }
 
+        /* Small CSAT info badge */
+        .csat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+            color: var(--text-0);
+            border: 1px solid var(--divider);
+            border-left: 4px solid var(--spring);
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: fit-content;
+            box-shadow: var(--shadow);
+            margin-top: 0.25rem;
+        }
+        .csat-badge .csat-label { opacity: 0.85; font-weight: 600; }
+        .csat-badge .csat-value { color: var(--spring); font-weight: 800; }
+
         .text-responses {
             background: rgba(255,255,255,0.03);
             border-radius: 10px;
@@ -239,6 +259,11 @@
             transform: translateX(2px);
         }
 
+        /* Compare legends */
+        .chart-legend { display: flex; gap: 1rem; margin: 0.25rem 0 0.5rem; align-items: center; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; color: var(--text-1); font-size: 0.9rem; }
+        .legend-swatch { width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15); }
+
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -264,7 +289,7 @@
             }
             
             .data-source-toggle-main {
-                max-width: 300px;
+                max-width: 360px;
             }
             
             .data-toggle-btn-main {
@@ -498,7 +523,7 @@
             overflow: hidden;
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow);
-            max-width: 400px;
+            max-width: 600px;
             margin: 0 auto;
         }
         
@@ -513,6 +538,7 @@
             transition: all 0.25s ease;
             position: relative;
             flex: 1;
+            white-space: nowrap;
         }
         
         .data-toggle-btn-main.active {
@@ -709,6 +735,9 @@
         :root[data-theme="light"] .section-title {
             color: #2c3e50;
         }
+        :root[data-theme="light"] #compareKeyInsights {
+            color: #2c3e50;
+        }
     </style>
 </head>
 <body>
@@ -749,6 +778,7 @@
             <div class="data-source-toggle-main">
                 <button class="data-toggle-btn-main active" onclick="switchDataSource('community')">Online Community</button>
                 <button class="data-toggle-btn-main" onclick="switchDataSource('city')">City Community</button>
+                <button class="data-toggle-btn-main" onclick="switchDataSource('compare')">Comparison</button>
             </div>
         </div>
     </div>
@@ -758,11 +788,12 @@
         <div class="data-source-toggle-sticky">
             <button class="data-toggle-btn-sticky active" onclick="switchDataSource('community')">Online Community</button>
             <button class="data-toggle-btn-sticky" onclick="switchDataSource('city')">City Community</button>
+            <button class="data-toggle-btn-sticky" onclick="switchDataSource('compare')">Comparison</button>
         </div>
     </div>
 
     <div class="container">
-        <div class="main-content">
+        <div class="main-content" id="singleContent">
             
             <!-- Geographic Distribution -->
             <div class="section">
@@ -809,6 +840,11 @@
                         <h2 class="section-title">Circle Platform Rating</h2>
                         <div class="chart-container chart-small">
                             <canvas id="circleChart"></canvas>
+                        </div>
+                        <div class="csat-badge" id="csatBadge" title="CSAT = (4★ + 5★) / total ratings">
+                            <span class="csat-label">Circle CSAT</span>
+                            <span class="csat-value" id="csatValue">--</span>
+                            <span class="csat-n" id="csatN" style="opacity:0.75; font-weight:600;">(n=--)</span>
                         </div>
                     </div>
                 </div>
@@ -948,10 +984,221 @@
             </div>
 
         </div>
+        
+        <!-- Compare View (hidden by default) -->
+        <div class="main-content" id="compareContent" style="display: none;">
+            <!-- Compare mode toggle -->
+            <div class="section" style="padding-bottom:1rem;">
+                <div id="compareModeToggle" class="data-source-toggle-main" style="max-width: 540px; margin: 0 auto;">
+                    <button class="data-toggle-btn-main cmp-toggle-btn" data-mode="delta">Delta</button>
+                    <button class="data-toggle-btn-main cmp-toggle-btn" data-mode="mirror">Mirror</button>
+                    <button class="data-toggle-btn-main cmp-toggle-btn active" data-mode="split">Split</button>
+                </div>
+                <p class="subtitle" style="margin-top:0.75rem; text-align:center;">Choose a compare mode: Delta highlights differences; Mirror shows both in one chart; Split shows them separately.</p>
+                <p class="subtitle" id="compareKeyInsights" style="margin-top:0.5rem; text-align:center; max-width: 1000px; margin-left:auto; margin-right:auto; color: var(--white);">
+                    City members are more local‑first and action‑oriented than the online cohort. They strongly prefer WhatsApp for communications (+29pp vs Online) and use Email and Circle far less (−13pp and −14pp), signaling a mobile, real‑time channel bias. They value in‑person experiences more (Local Meetups +10pp, Social Hangouts +10pp) and are more willing to help run the community (Event Hosting +9.5pp, Mentoring +4.6pp, fewer “Not Ready” −4.7pp). Circle satisfaction is lower (avg 3.6 vs 4.0; smaller Top‑2 share), despite both cohorts rating Content & Resources highly. Prioritize WhatsApp‑led outreach, city chapters/meetups, and targeted Circle improvements for city needs.
+                </p>
+            </div>
+
+            <!-- Split view container (existing charts) -->
+            <div id="compareSplit">
+            <!-- Value Ratings: stacked (above each other) -->
+            <div class="section">
+                <h2 class="section-title">How Valuable Are ALX Community Aspects? (Compare)</h2>
+                <div>
+                    <h3 class="section-subtitle">Online</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpValueOnline"></canvas></div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">City</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpValueCity"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Preferred Communication: one row -->
+            <div class="section">
+                <h2 class="section-title">Preferred Communication (Compare)</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="section-subtitle">Online</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpCommOnline"></canvas></div>
+                    </div>
+                    <div>
+                        <h3 class="section-subtitle">City</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpCommCity"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circle Platform Rating: one row -->
+            <div class="section">
+                <h2 class="section-title">Circle Platform Rating (Compare)</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="section-subtitle">Online</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpCircleOnline"></canvas></div>
+                        <div class="csat-badge" id="cmpCsatBadgeOnline" title="CSAT = (4★ + 5★) / total ratings">
+                            <span class="csat-label">Circle CSAT</span>
+                            <span class="csat-value" id="cmpCsatValueOnline">--</span>
+                            <span class="csat-n" id="cmpCsatNOnline" style="opacity:0.75; font-weight:600;">(n=--)</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="section-subtitle">City</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpCircleCity"></canvas></div>
+                        <div class="csat-badge" id="cmpCsatBadgeCity" title="CSAT = (4★ + 5★) / total ratings">
+                            <span class="csat-label">Circle CSAT</span>
+                            <span class="csat-value" id="cmpCsatValueCity">--</span>
+                            <span class="csat-n" id="cmpCsatNCity" style="opacity:0.75; font-weight:600;">(n=--)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Goals: stacked (above each other) -->
+            <div class="section">
+                <h2 class="section-title">Top Community Goals (Compare)</h2>
+                <div>
+                    <h3 class="section-subtitle">Online</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpGoalsOnline"></canvas></div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">City</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpGoalsCity"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Preferred Event Types: stacked -->
+            <div class="section">
+                <h2 class="section-title">Preferred Event Types (Compare)</h2>
+                <div>
+                    <h3 class="section-subtitle">Online</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpEventsOnline"></canvas></div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">City</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpEventsCity"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Content wanted: side-by-side doughnuts -->
+            <div class="section">
+                <h2 class="section-title">Content and Resources Wanted (Compare)</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="section-subtitle">Online</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpContentOnline"></canvas></div>
+                    </div>
+                    <div>
+                        <h3 class="section-subtitle">City</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpContentCity"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interest Groups: side-by-side doughnuts -->
+            <div class="section">
+                <h2 class="section-title">Interest Group Preferences (Compare)</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="section-subtitle">Online</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpInterestOnline"></canvas></div>
+                    </div>
+                    <div>
+                        <h3 class="section-subtitle">City</h3>
+                        <div class="chart-container chart-small"><canvas id="cmpInterestCity"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contribution: stacked -->
+            <div class="section">
+                <h2 class="section-title">How Members Want to Contribute (Compare)</h2>
+                <div>
+                    <h3 class="section-subtitle">Online</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpContribOnline"></canvas></div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">City</h3>
+                    <div class="chart-container chart-small"><canvas id="cmpContribCity"></canvas></div>
+                </div>
+            </div>
+            </div> <!-- end compareSplit -->
+
+            <!-- Mirror view container -->
+            <div id="compareMirror" style="display:none;">
+                <div class="section">
+                    <h2 class="section-title">Preferred Communication (Mirror)</h2>
+                    <div class="chart-container chart-small"><canvas id="mirComm"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Preferred Event Types (Mirror)</h2>
+                    <div class="chart-container chart-small"><canvas id="mirEvents"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">How Members Want to Contribute (Mirror)</h2>
+                    <div class="chart-container chart-small"><canvas id="mirContrib"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Top Community Goals (Mirror)</h2>
+                    <div class="chart-container chart-small"><canvas id="mirGoals"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Delta view container -->
+            <div id="compareDelta" style="display:none;">
+                <div class="section">
+                    <h2 class="section-title">Value Aspects — Top-2 (4–5) Delta</h2>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-swatch" style="background:#6b5bd8"></span> City higher (pp)</span>
+                        <span class="legend-item"><span class="legend-swatch" style="background:#05F283"></span> Online higher (pp)</span>
+                    </div>
+                    <p style="color: var(--text-1); margin: 0 0 0.5rem;">Shows the percentage‑point difference (City − Online) in the share of respondents rating each aspect Very or Extremely valuable (4–5 out of 5). Positive bars mean a higher share among City respondents. “pp” = percentage points (City% − Online%).</p>
+                    <div class="chart-container chart-small"><canvas id="dltValueTop2"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Preferred Communication — Delta</h2>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-swatch" style="background:#6b5bd8"></span> City higher (pp)</span>
+                        <span class="legend-item"><span class="legend-swatch" style="background:#05F283"></span> Online higher (pp)</span>
+                    </div>
+                    <p style="color: var(--text-1); margin: 0 0 0.5rem;">Shows the percentage‑point difference (City − Online) in the share of respondents who selected each channel as their preferred way to hear from ALX. Positive bars mean a higher share in City. “pp” = percentage points (City% − Online%).</p>
+                    <div class="chart-container chart-small"><canvas id="dltComm"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Preferred Event Types — Delta</h2>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-swatch" style="background:#6b5bd8"></span> City higher (pp)</span>
+                        <span class="legend-item"><span class="legend-swatch" style="background:#05F283"></span> Online higher (pp)</span>
+                    </div>
+                    <p style="color: var(--text-1); margin: 0 0 0.5rem;">Shows the percentage‑point difference (City − Online) in the share of responses that mention each event type. Positive bars mean a higher share in City. Categories are derived from text and may be multi‑mention, so totals can exceed 100%. “pp” = percentage points (City% − Online%).</p>
+                    <div class="chart-container chart-small"><canvas id="dltEvents"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">How Members Want to Contribute — Delta</h2>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-swatch" style="background:#6b5bd8"></span> City higher (pp)</span>
+                        <span class="legend-item"><span class="legend-swatch" style="background:#05F283"></span> Online higher (pp)</span>
+                    </div>
+                    <p style="color: var(--text-1); margin: 0 0 0.5rem;">Shows the percentage‑point difference (City − Online) in the share of respondents mentioning or selecting each way they want to contribute. Positive bars mean a higher share in City. This can be multi‑select, so totals may exceed 100%. “pp” = percentage points (City% − Online%).</p>
+                    <div class="chart-container chart-small"><canvas id="dltContrib"></canvas></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Circle Platform — Top-2 (4–5) Delta</h2>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-swatch" style="background:#6b5bd8"></span> City higher (pp)</span>
+                        <span class="legend-item"><span class="legend-swatch" style="background:#05F283"></span> Online higher (pp)</span>
+                    </div>
+                    <p style="color: var(--text-1); margin: 0 0 0.5rem;">Shows the percentage‑point difference (City − Online) in the share of respondents rating the Circle platform 4–5 out of 5. Positive bars mean higher satisfaction in City. “pp” = percentage points (City% − Online%). The note below shows the average rating by cohort.</p>
+                    <div class="chart-container chart-small"><canvas id="dltCircleTop2"></canvas></div>
+                    <p class="subtitle" id="dltCircleAvg" style="margin-top:0.5rem; text-align:center;"></p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="survey_data.js"></script>
-    <script src="city_survey_data.js"></script>
+    <script src="survey_data.js?v=1726185600"></script>
+    <script src="city_survey_data.js?v=1726200001"></script>
     <script>
         // Theme setup
         (function() {
@@ -1005,7 +1252,7 @@
             if (currentDataSource === source) return;
             
             currentDataSource = source;
-            currentData = source === 'community' ? surveyData : citySurveyData;
+            currentData = source === 'community' ? surveyData : (source === 'city' ? citySurveyData : null);
             
             // Update all toggle buttons (both main and sticky)
             document.querySelectorAll('.data-toggle-btn-main, .data-toggle-btn-sticky').forEach(btn => {
@@ -1020,20 +1267,35 @@
             // Update title and subtitle
             const title = document.getElementById('reportTitle');
             const subtitle = document.querySelector('.subtitle');
+            const singleContent = document.getElementById('singleContent');
+            const compareContent = document.getElementById('compareContent');
+            const statsOverview = document.querySelector('.stats-overview');
             
             if (source === 'community') {
-                title.textContent = 'ALX Online Community Report';
+                title.textContent = 'ALX alsoc Report';
                 subtitle.innerHTML = 'Insights from <span id="total-responses">Loading...</span> online community members across Africa';
-            } else {
+                singleContent.style.display = '';
+                compareContent.style.display = 'none';
+                if (statsOverview) statsOverview.style.display = '';
+                initializeReport();
+                updateAIInsights(source);
+            } else if (source === 'city') {
                 title.textContent = 'ALX City Community Report';
                 subtitle.innerHTML = 'Insights from <span id="total-responses">Loading...</span> city-based community members across Africa';
+                singleContent.style.display = '';
+                compareContent.style.display = 'none';
+                if (statsOverview) statsOverview.style.display = '';
+                initializeReport();
+                updateAIInsights(source);
+            } else if (source === 'compare') {
+                title.textContent = 'ALX Online / City Comparison';
+                subtitle.textContent = 'Quickly spot differences between cohorts';
+                singleContent.style.display = 'none';
+                compareContent.style.display = '';
+                if (statsOverview) statsOverview.style.display = 'none';
+                setupCompareModeToggle();
+                renderCompareMode('delta');
             }
-            
-            // Reinitialize the report with new data
-            initializeReport();
-            
-            // Update AI insights
-            updateAIInsights(source);
         }
 
         // Update AI insights based on data source
@@ -1315,6 +1577,15 @@
             const circleRatingLabels = ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'];
             const circleRatingData = [1, 2, 3, 4, 5].map(rating => currentData.circle_ratings[rating + '.0'] || 0);
 
+            // CSAT calculation: percentage of 4★ and 5★ ratings
+            const totalCircle = circleRatingData.reduce((a,b)=>a+b,0);
+            const satisfied = (circleRatingData[3] || 0) + (circleRatingData[4] || 0);
+            const csatPct = totalCircle ? Math.round((satisfied / totalCircle) * 1000) / 10 : 0; // one decimal
+            const csatValueEl = document.getElementById('csatValue');
+            const csatNEl = document.getElementById('csatN');
+            if (csatValueEl) csatValueEl.textContent = `${csatPct}%`;
+            if (csatNEl) csatNEl.textContent = `(n=${totalCircle.toLocaleString()})`;
+
             const c4 = new Chart(document.getElementById('circleChart'), {
                 type: 'bar',
                 data: {
@@ -1453,6 +1724,406 @@
             (window._charts = window._charts || []).push(c9);
         }
 
+        // Comparison view initialization
+        function initializeCompare() {
+            // Destroy any existing charts
+            if (window._charts) {
+                window._charts.forEach(chart => chart.destroy());
+                window._charts = [];
+            }
+
+            const online = surveyData;
+            const city = citySurveyData;
+
+            // Helper palettes for contrast
+            const onlineBar = ['#05F283', '#5648b7', '#27f79a', '#8d82e6', '#2a6aa0'];
+            const cityBar = ['#00d27f', '#6b5bd8', '#38f9d7', '#a59bf0', '#3b82c4'];
+            const onlinePie = ['#05F283', '#5648b7', '#27f79a', '#8d82e6', '#2a6aa0'];
+            const cityPie = ['#00d27f', '#6b5bd8', '#38f9d7', '#a59bf0', '#3b82c4'];
+
+            // Helpers: percent conversions and axes
+            const pctTicks = {
+                beginAtZero: true,
+                grid: { color: darkGrid },
+                ticks: {
+                    color: darkTick,
+                    callback: (val) => val + '%'
+                }
+            };
+            const pctStackedAxes = {
+                x: { stacked: true, grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                y: { ...pctTicks, stacked: true, max: 100 }
+            };
+            const pctAxes = {
+                x: { grid: { color: 'transparent' }, ticks: { color: darkTick } },
+                y: { ...pctTicks }
+            };
+            const toPct = (arr) => {
+                const total = arr.reduce((a,b)=>a+b,0);
+                return arr.map(v => total ? v/total*100 : 0);
+            };
+            const roundUpTo = (val, step) => Math.ceil(val / step) * step;
+            const computeYMax = (values) => {
+                const maxVal = Math.max(0, ...values);
+                const withHeadroom = maxVal + Math.max(5, maxVal * 0.2);
+                let y = Math.min(100, roundUpTo(withHeadroom, 5));
+                if (y < 20) y = 20;
+                return y;
+            };
+            const tooltipPercent = {
+                callbacks: {
+                    label: function(ctx) {
+                        const v = (ctx.parsed && typeof ctx.parsed === 'object' && 'y' in ctx.parsed) ? ctx.parsed.y : (typeof ctx.parsed === 'number' ? ctx.parsed : (typeof ctx.raw === 'number' ? ctx.raw : 0));
+                        const label = ctx.label || (ctx.dataset && ctx.dataset.label) || '';
+                        return `${label}: ${v.toFixed(1)}%`;
+                    }
+                }
+            };
+
+            // Value Ratings (stacked bars) side-by-side
+            const valueAspects = Object.keys(online.value_ratings);
+            const valueLabels = valueAspects.map(a => a.replace(' (e.g., webinars, workshops)', '').replace(' (e.g., meetups, networking sessions)', ''));
+            function valueDatasetsPct(src, palette) {
+                return valueAspects.map((aspect, idx) => {
+                    const counts = [
+                        src.value_ratings[aspect]['5 = Extremely valuable'] || 0,
+                        src.value_ratings[aspect]['4 = Very valuable'] || 0,
+                        src.value_ratings[aspect]['3 = Moderately valuable'] || 0,
+                        src.value_ratings[aspect]['2 = Slightly valuable'] || 0,
+                        src.value_ratings[aspect]['1 = Not valuable'] || 0
+                    ];
+                    const total = counts.reduce((a,b)=>a+b,0) || 1;
+                    return counts.map(c => c/total*100);
+                });
+            }
+            // Build datasets in Likert order using percent per aspect
+            function buildValueDatasetFromMatrix(matrixPct, palette) {
+                const [extreme, very, mod, slight, notv] = [0,1,2,3,4].map(i => matrixPct.map(row => row[i]));
+                return [
+                    { label: 'Extremely Valuable', data: extreme, backgroundColor: palette[0] },
+                    { label: 'Very Valuable', data: very, backgroundColor: palette[1] },
+                    { label: 'Moderately Valuable', data: mod, backgroundColor: palette[2] },
+                    { label: 'Slightly Valuable', data: slight, backgroundColor: palette[3] },
+                    { label: 'Not Valuable', data: notv, backgroundColor: palette[4] }
+                ];
+            }
+            const matOn = valueDatasetsPct(online, onlineBar);
+            const matCi = valueDatasetsPct(city, cityBar);
+            const cValOn = new Chart(document.getElementById('cmpValueOnline'), { type: 'bar', data: { labels: valueLabels, datasets: buildValueDatasetFromMatrix(matOn, onlineBar) }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent }, scales: pctStackedAxes } });
+            const cValCi = new Chart(document.getElementById('cmpValueCity'), { type: 'bar', data: { labels: valueLabels, datasets: buildValueDatasetFromMatrix(matCi, cityBar) }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent }, scales: pctStackedAxes } });
+            (window._charts = window._charts || []).push(cValOn, cValCi);
+
+            // Preferred Communication (pie) side-by-side
+            const commLabels = Object.keys(online.communication_preferences);
+            const onCommCounts = commLabels.map(k => online.communication_preferences[k] || 0);
+            const ciCommCounts = commLabels.map(k => city.communication_preferences[k] || 0);
+            const cCommOn = new Chart(document.getElementById('cmpCommOnline'), { type: 'pie', data: { labels: commLabels, datasets: [{ data: toPct(onCommCounts), backgroundColor: onlinePie, borderColor: '#07213d', borderWidth: 1 }] }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent } } });
+            const cCommCi = new Chart(document.getElementById('cmpCommCity'), { type: 'pie', data: { labels: commLabels, datasets: [{ data: toPct(ciCommCounts), backgroundColor: cityPie, borderColor: '#07213d', borderWidth: 1 }] }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent } } });
+            (window._charts = window._charts || []).push(cCommOn, cCommCi);
+
+            // Circle Ratings (bars) side-by-side
+            const circleLabels = ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'];
+            const circleCounts = r => [1,2,3,4,5].map(x => r.circle_ratings[x + '.0'] || 0);
+            const cirOnPct = toPct(circleCounts(online));
+            const cirCiPct = toPct(circleCounts(city));
+            const cCirOn = new Chart(document.getElementById('cmpCircleOnline'), { type: 'bar', data: { labels: circleLabels, datasets: [{ data: cirOnPct, backgroundColor: ['#2a6aa0', '#8d82e6', '#5648b7', '#27f79a', '#05F283'], borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(cirOnPct) } } } });
+            const cCirCi = new Chart(document.getElementById('cmpCircleCity'), { type: 'bar', data: { labels: circleLabels, datasets: [{ data: cirCiPct, backgroundColor: ['#356fae', '#a59bf0', '#6b5bd8', '#38f9d7', '#00d27f'], borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(cirCiPct) } } } });
+            (window._charts = window._charts || []).push(cCirOn, cCirCi);
+
+            // CSAT badges for compare split
+            function computeCsatFromPct(pcts) {
+                // pcts are percentage shares of 1..5; CSAT is 4+5
+                const csat = (pcts[3] || 0) + (pcts[4] || 0);
+                return Math.round(csat * 10) / 10; // 1 decimal
+            }
+            function computeTotalCounts(src) {
+                return [1,2,3,4,5].reduce((sum, r) => sum + (src.circle_ratings[r + '.0'] || 0), 0);
+            }
+            const csatOnlinePct = computeCsatFromPct(cirOnPct);
+            const csatCityPct = computeCsatFromPct(cirCiPct);
+            const csOnlineN = computeTotalCounts(online);
+            const csCityN = computeTotalCounts(city);
+            const csOnVal = document.getElementById('cmpCsatValueOnline');
+            const csOnN = document.getElementById('cmpCsatNOnline');
+            const csCiVal = document.getElementById('cmpCsatValueCity');
+            const csCiN = document.getElementById('cmpCsatNCity');
+            if (csOnVal) csOnVal.textContent = `${csatOnlinePct}%`;
+            if (csOnN) csOnN.textContent = `(n=${csOnlineN.toLocaleString()})`;
+            if (csCiVal) csCiVal.textContent = `${csatCityPct}%`;
+            if (csCiN) csCiN.textContent = `(n=${csCityN.toLocaleString()})`;
+
+            // Community Goals (bars) stacked vertically
+            const goalKeys = Array.from(new Set([...Object.keys(online.categorized_responses.community_goals), ...Object.keys(city.categorized_responses.community_goals)]));
+            function goalCounts(src) { return goalKeys.map(k => (src.categorized_responses.community_goals[k] || []).length); }
+            const goalOnPct = toPct(goalCounts(online));
+            const goalCiPct = toPct(goalCounts(city));
+            const cGoalOn = new Chart(document.getElementById('cmpGoalsOnline'), { type: 'bar', data: { labels: goalKeys, datasets: [{ data: goalOnPct, backgroundColor: '#05F283', borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(goalOnPct) } } } });
+            const cGoalCi = new Chart(document.getElementById('cmpGoalsCity'), { type: 'bar', data: { labels: goalKeys, datasets: [{ data: goalCiPct, backgroundColor: '#6b5bd8', borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(goalCiPct) } } } });
+            (window._charts = window._charts || []).push(cGoalOn, cGoalCi);
+
+            // Events (bars) stacked vertically
+            const eventKeys = Object.keys(online.event_preferences);
+            const evtOnPct = toPct(eventKeys.map(k => online.event_preferences[k] || 0));
+            const evtCiPct = toPct(eventKeys.map(k => city.event_preferences[k] || 0));
+            const cEvtOn = new Chart(document.getElementById('cmpEventsOnline'), { type: 'bar', data: { labels: eventKeys, datasets: [{ data: evtOnPct, backgroundColor: '#5648b7', borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(evtOnPct) } } } });
+            const cEvtCi = new Chart(document.getElementById('cmpEventsCity'), { type: 'bar', data: { labels: eventKeys, datasets: [{ data: evtCiPct, backgroundColor: '#6b5bd8', borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(evtCiPct) } } } });
+            (window._charts = window._charts || []).push(cEvtOn, cEvtCi);
+
+            // Content wanted (doughnut) side-by-side
+            const contentKeys = Object.keys(online.categorized_responses.content_preferences);
+            const cntOnPct = toPct(contentKeys.map(k => (online.categorized_responses.content_preferences[k] || []).length));
+            const cntCiPct = toPct(contentKeys.map(k => (city.categorized_responses.content_preferences[k] || []).length));
+            const cCntOn = new Chart(document.getElementById('cmpContentOnline'), { type: 'doughnut', data: { labels: contentKeys, datasets: [{ data: cntOnPct, backgroundColor: ['#05F283', '#5648b7', '#27f79a', '#8d82e6', '#2a6aa0', '#7bdcb5'], borderColor: '#07213d', borderWidth: 1 }] }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent } } });
+            const cCntCi = new Chart(document.getElementById('cmpContentCity'), { type: 'doughnut', data: { labels: contentKeys, datasets: [{ data: cntCiPct, backgroundColor: ['#00d27f', '#6b5bd8', '#38f9d7', '#a59bf0', '#3b82c4', '#7bdcb5'], borderColor: '#07213d', borderWidth: 1 }] }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent } } });
+            (window._charts = window._charts || []).push(cCntOn, cCntCi);
+
+            // Interest groups (doughnut) side-by-side
+            const interestKeys = Object.keys(online.categorized_responses.interest_groups);
+            const intOnPct = toPct(interestKeys.map(k => (online.categorized_responses.interest_groups[k] || []).length));
+            const intCiPct = toPct(interestKeys.map(k => (city.categorized_responses.interest_groups[k] || []).length));
+            const cIntOn = new Chart(document.getElementById('cmpInterestOnline'), { type: 'doughnut', data: { labels: interestKeys, datasets: [{ data: intOnPct, backgroundColor: ['#27f79a', '#05F283', '#5648b7', '#8d82e6', '#2a6aa0', '#7bdcb5'], borderColor: '#07213d', borderWidth: 1 }] }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent } } });
+            const cIntCi = new Chart(document.getElementById('cmpInterestCity'), { type: 'doughnut', data: { labels: interestKeys, datasets: [{ data: intCiPct, backgroundColor: ['#38f9d7', '#00d27f', '#6b5bd8', '#a59bf0', '#3b82c4', '#7bdcb5'], borderColor: '#07213d', borderWidth: 1 }] }, options: { ...chartConfig, plugins: { ...chartConfig.plugins, tooltip: tooltipPercent } } });
+            (window._charts = window._charts || []).push(cIntOn, cIntCi);
+
+            // Contribution (bars) stacked vertically
+            const contribKeys = Object.keys(online.contribution_preferences);
+            const conOnPct = toPct(contribKeys.map(k => online.contribution_preferences[k] || 0));
+            const conCiPct = toPct(contribKeys.map(k => city.contribution_preferences[k] || 0));
+            const cConOn = new Chart(document.getElementById('cmpContribOnline'), { type: 'bar', data: { labels: contribKeys, datasets: [{ data: conOnPct, backgroundColor: '#8d82e6', borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(conOnPct) } } } });
+            const cConCi = new Chart(document.getElementById('cmpContribCity'), { type: 'bar', data: { labels: contribKeys, datasets: [{ data: conCiPct, backgroundColor: '#6b5bd8', borderWidth: 0, borderRadius: 8 }] }, options: { ...chartConfig, plugins: { legend: { display: false }, tooltip: tooltipPercent }, scales: { ...pctAxes, y: { ...pctAxes.y, max: computeYMax(conCiPct) } } } });
+            (window._charts = window._charts || []).push(cConOn, cConCi);
+
+            // Apply theme to new charts
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            window.updateChartsTheme(currentTheme);
+        }
+
+        // Compare mode toggle and renderers
+        function setupCompareModeToggle() {
+            const container = document.getElementById('compareModeToggle');
+            if (!container) return;
+            const buttons = Array.from(container.querySelectorAll('.cmp-toggle-btn'));
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const mode = btn.getAttribute('data-mode');
+                    renderCompareMode(mode);
+                });
+            });
+            // Set default to delta
+            buttons.forEach(b => b.classList.remove('active'));
+            const def = container.querySelector('[data-mode="delta"]');
+            if (def) def.classList.add('active');
+        }
+
+        function renderCompareMode(mode) {
+            const split = document.getElementById('compareSplit');
+            const mirror = document.getElementById('compareMirror');
+            const delta = document.getElementById('compareDelta');
+
+            // Destroy old charts
+            if (window._charts) { window._charts.forEach(ch => ch.destroy()); window._charts = []; }
+
+            if (mode === 'mirror') {
+                split.style.display = 'none';
+                delta.style.display = 'none';
+                mirror.style.display = '';
+                createMirrorCharts();
+            } else if (mode === 'delta') {
+                split.style.display = 'none';
+                mirror.style.display = 'none';
+                delta.style.display = '';
+                createDeltaCharts();
+            } else {
+                // split
+                mirror.style.display = 'none';
+                delta.style.display = 'none';
+                split.style.display = '';
+                initializeCompare();
+            }
+        }
+
+        function createMirrorCharts() {
+            const online = surveyData;
+            const city = citySurveyData;
+
+            const onlineColor = '#05F283';
+            const cityColor = '#6b5bd8';
+
+            const darkTick = '#d9e6ff';
+            const xTick = {
+                color: darkTick,
+                callback: (val) => `${Math.floor(Math.abs(Number(val)))}%`
+            };
+
+            const toPct = (arr) => {
+                const total = arr.reduce((a,b)=>a+b,0);
+                return arr.map(v => total ? v/total*100 : 0);
+            };
+            const absMax = (a,b) => Math.max(...a.map(v=>Math.abs(v)), ...b.map(v=>Math.abs(v)), 10);
+
+            // Tornado builder
+            function buildTornado(canvasId, labels, onlinePct, cityPct) {
+                const ctx = document.getElementById(canvasId);
+                const maxV = absMax(onlinePct, cityPct);
+                const c = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [
+                            { label: 'Online', data: onlinePct.map(v=>-v), backgroundColor: onlineColor, borderWidth: 0, borderRadius: 6 },
+                            { label: 'City', data: cityPct, backgroundColor: cityColor, borderWidth: 0, borderRadius: 6 }
+                        ]
+                    },
+                    options: {
+                        ...chartConfig,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: darkTick } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(ctx) {
+                                        const val = Math.abs(ctx.raw || 0);
+                                        return `${ctx.dataset.label}: ${val.toFixed(1)}%`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { stacked: false, grid: { color: darkGrid }, min: -maxV, max: maxV, ticks: xTick },
+                            y: { grid: { color: 'transparent' }, ticks: { color: darkTick } }
+                        }
+                    }
+                });
+                (window._charts = window._charts || []).push(c);
+            }
+
+            // Data prep helpers
+            const commLabels = Object.keys(online.communication_preferences);
+            const onlineCommPct = toPct(commLabels.map(k => online.communication_preferences[k] || 0));
+            const cityCommPct = toPct(commLabels.map(k => city.communication_preferences[k] || 0));
+            buildTornado('mirComm', commLabels, onlineCommPct, cityCommPct);
+
+            const evtLabels = Object.keys(online.event_preferences);
+            const onlineEvtPct = toPct(evtLabels.map(k => online.event_preferences[k] || 0));
+            const cityEvtPct = toPct(evtLabels.map(k => city.event_preferences[k] || 0));
+            buildTornado('mirEvents', evtLabels, onlineEvtPct, cityEvtPct);
+
+            const conLabels = Object.keys(online.contribution_preferences);
+            const onlineConPct = toPct(conLabels.map(k => online.contribution_preferences[k] || 0));
+            const cityConPct = toPct(conLabels.map(k => city.contribution_preferences[k] || 0));
+            buildTornado('mirContrib', conLabels, onlineConPct, cityConPct);
+
+            const goalLabels = Array.from(new Set([...Object.keys(online.categorized_responses.community_goals), ...Object.keys(city.categorized_responses.community_goals)]));
+            function counts(src) { return goalLabels.map(k => (src.categorized_responses.community_goals[k] || []).length); }
+            buildTornado('mirGoals', goalLabels, toPct(counts(online)), toPct(counts(city)));
+
+            // Theme sync
+            window.updateChartsTheme(document.documentElement.getAttribute('data-theme'));
+        }
+
+        function createDeltaCharts() {
+            const online = surveyData;
+            const city = citySurveyData;
+
+            const posColor = '#6b5bd8'; // City > Online
+            const negColor = '#05F283'; // Online > City
+            const darkTick = '#d9e6ff';
+
+            const toPct = (arr) => {
+                const total = arr.reduce((a,b)=>a+b,0);
+                return arr.map(v => total ? v/total*100 : 0);
+            };
+
+            function buildDelta(canvasId, labels, onlinePct, cityPct, title) {
+                const delta = labels.map((_,i) => cityPct[i] - onlinePct[i]);
+                // Sort by absolute delta desc
+                const idx = delta.map((d,i)=>i).sort((a,b)=>Math.abs(delta[b])-Math.abs(delta[a]));
+                const slabels = idx.map(i=>labels[i]);
+                const sdelta = idx.map(i=>delta[i]);
+                const colors = sdelta.map(v => v >= 0 ? posColor : negColor);
+                const maxAbs = Math.max(10, ...sdelta.map(v=>Math.abs(v)));
+                const ctx = document.getElementById(canvasId);
+                const c = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: slabels, datasets: [{ label: 'City − Online (pp)', data: sdelta, backgroundColor: colors, borderWidth: 0, borderRadius: 6 }]},
+                    options: {
+                        ...chartConfig,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(ctx) {
+                                        const v = ctx.raw || 0;
+                                        return `${(v>=0?'+':'')}${v.toFixed(1)} pp`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { color: darkGrid }, min: -maxAbs, max: maxAbs, ticks: { color: darkTick, callback: (v)=> `${Number(v)>0?'+':''}${Math.floor(Number(v))}` } },
+                            y: { grid: { color: 'transparent' }, ticks: { color: darkTick } }
+                        }
+                    }
+                });
+                (window._charts = window._charts || []).push(c);
+            }
+
+            // Value Aspects Top-2 box (4–5)
+            const aspects = Object.keys(online.value_ratings);
+            const onTop2 = aspects.map(a => {
+                const o = online.value_ratings[a];
+                const counts = [o['5 = Extremely valuable']||0, o['4 = Very valuable']||0, o['3 = Moderately valuable']||0, o['2 = Slightly valuable']||0, o['1 = Not valuable']||0];
+                const total = counts.reduce((a,b)=>a+b,0) || 1;
+                return ((counts[0]+counts[1]) / total) * 100;
+            });
+            const ciTop2 = aspects.map(a => {
+                const o = city.value_ratings[a];
+                const counts = [o['5 = Extremely valuable']||0, o['4 = Very valuable']||0, o['3 = Moderately valuable']||0, o['2 = Slightly valuable']||0, o['1 = Not valuable']||0];
+                const total = counts.reduce((a,b)=>a+b,0) || 1;
+                return ((counts[0]+counts[1]) / total) * 100;
+            });
+            const aspectLabels = aspects.map(a => a.replace(' (e.g., webinars, workshops)', '').replace(' (e.g., meetups, networking sessions)', ''));
+            buildDelta('dltValueTop2', aspectLabels, onTop2, ciTop2, 'Top-2 Box');
+
+            // Communication delta
+            const commLabels = Object.keys(online.communication_preferences);
+            const onComm = toPct(commLabels.map(k => online.communication_preferences[k] || 0));
+            const ciComm = toPct(commLabels.map(k => city.communication_preferences[k] || 0));
+            buildDelta('dltComm', commLabels, onComm, ciComm, 'Communication');
+
+            // Events delta
+            const evtLabels = Object.keys(online.event_preferences);
+            const onEvt = toPct(evtLabels.map(k => online.event_preferences[k] || 0));
+            const ciEvt = toPct(evtLabels.map(k => city.event_preferences[k] || 0));
+            buildDelta('dltEvents', evtLabels, onEvt, ciEvt, 'Events');
+
+            // Contributions delta
+            const conLabels = Object.keys(online.contribution_preferences);
+            const onCon = toPct(conLabels.map(k => online.contribution_preferences[k] || 0));
+            const ciCon = toPct(conLabels.map(k => city.contribution_preferences[k] || 0));
+            buildDelta('dltContrib', conLabels, onCon, ciCon, 'Contributions');
+
+            // Circle top-2 and average annotation
+            function ratingsTop2(src) {
+                const counts = [1,2,3,4,5].map(r => src.circle_ratings[r+'.0']||0);
+                const total = counts.reduce((a,b)=>a+b,0)||1;
+                return ((counts[3]+counts[4]) / total) * 100;
+            }
+            const top2Online = ratingsTop2(online);
+            const top2City = ratingsTop2(city);
+            const circleDelta = top2City - top2Online;
+            // Single delta bar
+            buildDelta('dltCircleTop2', ['Top-2 (4–5)'], [top2Online], [top2City], 'Circle Top-2');
+            // Average text
+            const avg = document.getElementById('dltCircleAvg');
+            avg.textContent = `Average rating — Online: ${online.stats.avg_circle_rating.toFixed(1)} vs City: ${city.stats.avg_circle_rating.toFixed(1)} (${circleDelta>=0?'+':''}${circleDelta.toFixed(1)} pp Top-2)`;
+
+            // Theme sync
+            window.updateChartsTheme(document.documentElement.getAttribute('data-theme'));
+        }
         function renderTextResponses() {
             // Circle Feedback
             renderResponseCategories('circle-feedback', currentData.categorized_responses.circle_feedback);
